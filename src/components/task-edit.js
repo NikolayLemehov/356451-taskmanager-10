@@ -20,7 +20,7 @@ const createColorsMarkup = (currentColor) => {
         >`
       );
     })
-    .join(`\n`);
+    .join(``);
 };
 
 const createRepeatingDaysMarkup = (repeatingDays) => {
@@ -41,7 +41,7 @@ const createRepeatingDaysMarkup = (repeatingDays) => {
         >`
       );
     })
-    .join(`\n`);
+    .join(``);
 };
 
 const createHashtags = (tags) => {
@@ -67,7 +67,7 @@ const createHashtags = (tags) => {
         </span>`
       );
     })
-    .join(`\n`);
+    .join(``);
 };
 
 const createTaskEditTemplate = (task) => {
