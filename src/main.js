@@ -6,14 +6,12 @@ import {createTaskEditTemplate} from "./components/task-edit";
 import {createLoadMoreButtonTemplate} from "./components/load-more-button";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from './mock/filter.js';
+import {render} from "./utils";
+
 const TASK_COUNT = 22;
 const ShowingTasksCount = {
   ON_START: 8,
   BY_BUTTON: 8,
-};
-
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
 };
 
 const siteMainElement = document.querySelector(`.main`);

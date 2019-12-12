@@ -11,4 +11,8 @@ const formatTime = (date) => {
   return `${hours}:${minutes} ${interval}`;
 };
 
-export {formatTime};
+const render = (container, template, place = `beforeend`) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+export {formatTime, render};
