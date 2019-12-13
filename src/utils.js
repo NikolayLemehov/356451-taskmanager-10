@@ -19,7 +19,6 @@ const createElement = (template) => {
 };
 
 const render = (container, element) => {
-  // container.insertAdjacentHTML(place, template);
   container.append(element);
 };
 
