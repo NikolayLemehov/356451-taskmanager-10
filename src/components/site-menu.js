@@ -1,3 +1,5 @@
+import {createElement} from "../utils";
+
 const createSiteMenuTemplate = () => {
   return (
     `<section class="control__btn-wrap">
@@ -42,7 +44,7 @@ export default class SiteMenu {
 
   getElement() {
     if (!this._element) {
-      this._element = this.getTemplate();
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

@@ -1,5 +1,7 @@
 import {colors, days, monthNames} from '../const.js';
 import {formatTime} from '../utils.js';
+import {createElement} from "../utils";
+
 
 const createColorsMarkup = (currentColor) => {
   return colors
@@ -189,7 +191,7 @@ export default class TaskEdit {
 
   getElement() {
     if (!this._element) {
-      this._element = this.getTemplate();
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

@@ -1,3 +1,5 @@
+import {createElement} from "../utils";
+
 export default class LoadMoreButton {
   constructor() {
     this._element = null;
@@ -11,7 +13,7 @@ export default class LoadMoreButton {
 
   getElement() {
     if (!this._element) {
-      this._element = this.getTemplate();
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

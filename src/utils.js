@@ -11,8 +11,16 @@ const formatTime = (date) => {
   return `${hours}:${minutes} ${interval}`;
 };
 
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
+const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
 };
 
-export {formatTime, render};
+const render = (container, element) => {
+  // container.insertAdjacentHTML(place, template);
+  container.append(element);
+};
+
+export {formatTime, createElement, render};
