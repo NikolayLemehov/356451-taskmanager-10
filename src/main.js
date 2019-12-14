@@ -88,7 +88,6 @@ if (isAllTasksArchived) {
 
     if (showingTasksCount >= tasks.length) {
       loadMoreButtonComponent.getElement().remove();
-      loadMoreButtonComponent.removeElement();
     }
   });
 }
