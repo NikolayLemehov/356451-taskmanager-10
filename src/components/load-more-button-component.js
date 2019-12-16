@@ -1,6 +1,6 @@
 import {createElement} from "../utils";
 
-export default class LoadMoreButton {
+export default class LoadMoreButtonComponent {
   constructor() {
     this._element = null;
   }

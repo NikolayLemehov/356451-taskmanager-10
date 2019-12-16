@@ -1,12 +1,12 @@
-import SiteMenuComponent from "./components/site-menu";
-import FilterComponent from "./components/filter";
-import BoardComponent from "./components/board";
-import TaskComponent from "./components/task";
-import TasksComponent from "./components/tasks";
-import TaskEditComponent from "./components/task-edit";
-import LoadMoreButtonComponent from "./components/load-more-button";
-import NoTasksComponent from "./components/no-tasks";
-import SortingComponent from "./components/sorting";
+import SiteMenuComponent from "./components/site-menu-component";
+import FilterComponent from "./components/filter-component";
+import BoardComponent from "./components/board-component";
+import TaskComponent from "./components/task-component";
+import TaskListComponent from "./components/task-list-component";
+import TaskEditComponent from "./components/task-edit-component";
+import LoadMoreButtonComponent from "./components/load-more-button-component";
+import EmptyComponent from "./components/empty-component";
+import SortingComponent from "./components/sorting-component";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from './mock/filter.js';
 import {render} from "./utils";
@@ -66,10 +66,10 @@ const tasks = generateTasks(TASK_COUNT);
 const isAllTasksArchived = tasks.every((task) => task.isArchive);
 
 if (isAllTasksArchived) {
-  render(boardComponent.getElement(), new NoTasksComponent().getElement());
+  render(boardComponent.getElement(), new EmptyComponent().getElement());
 } else {
   render(boardComponent.getElement(), new SortingComponent().getElement());
-  render(boardComponent.getElement(), new TasksComponent().getElement());
+  render(boardComponent.getElement(), new TaskListComponent().getElement());
 
   const taskListElement = siteMainElement.querySelector(`.board__tasks`);
 

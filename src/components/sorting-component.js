@@ -11,7 +11,7 @@ const createSortingTemplate = () => {
 };
 
 
-export default class Sorting {
+export default class SortingComponent {
   constructor() {
     this._element = null;
   }
