@@ -20,14 +20,13 @@ const createHashtagsMarkup = (hashtags) => {
 const createTaskTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
-  const isExpired = dueDate < Date.now();
   const isDateShowing = !!dueDate;
-
   const date = isDateShowing ? `${dueDate.getDate()} ${monthNames[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
+  const isExpired = dueDate < Date.now() && !!dueDate;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
   return (
