@@ -51,23 +51,14 @@ const renderTask = (taskListElement, task) => {
   render(taskListElement, taskComponent.getElement());
 };
 
-const siteMainElement = document.querySelector(`.main`);
-const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
+const renderBoard = (boardComponent, tasks) => {
+  const isAllTasksArchived = tasks.every((task) => task.isArchive);
 
-render(siteHeaderElement, new SiteMenuComponent().getElement());
+  if (isAllTasksArchived) {
+    render(boardComponent.getElement(), new EmptyComponent().getElement());
+    return;
+  }
 
-const filters = generateFilters();
-render(siteMainElement, new FilterComponent(filters).getElement());
-
-const boardComponent = new BoardComponent();
-render(siteMainElement, boardComponent.getElement());
-
-const tasks = generateTasks(TASK_COUNT);
-const isAllTasksArchived = tasks.every((task) => task.isArchive);
-
-if (isAllTasksArchived) {
-  render(boardComponent.getElement(), new EmptyComponent().getElement());
-} else {
   render(boardComponent.getElement(), new SortingComponent().getElement());
   render(boardComponent.getElement(), new TaskListComponent().getElement());
 
@@ -90,4 +81,19 @@ if (isAllTasksArchived) {
       loadMoreButtonComponent.getElement().remove();
     }
   });
-}
+};
+
+const siteMainElement = document.querySelector(`.main`);
+const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
+
+render(siteHeaderElement, new SiteMenuComponent().getElement());
+
+const filters = generateFilters();
+render(siteMainElement, new FilterComponent(filters).getElement());
+
+const boardComponent = new BoardComponent();
+render(siteMainElement, boardComponent.getElement());
+
+const tasks = generateTasks(TASK_COUNT);
+
+renderBoard(boardComponent, tasks);
