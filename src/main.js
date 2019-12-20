@@ -9,7 +9,7 @@ import EmptyComponent from "./components/empty-component";
 import SortingComponent from "./components/sorting-component";
 import {generateTasks} from "./mock/task";
 import {generateFilters} from './mock/filter.js';
-import {render} from "./utils";
+import {render, remove, replace} from "./utils/render";
 
 const TASK_COUNT = 21;
 const ShowingTasksCount = {
@@ -28,11 +28,11 @@ const renderTask = (taskListElement, task) => {
   };
 
   const replaceEditToTask = () => {
-    taskListElement.replaceChild(taskComponent.getElement(), taskEditComponent.getElement());
+    replace(taskComponent, taskEditComponent);
   };
 
   const replaceTaskToEdit = () => {
-    taskListElement.replaceChild(taskEditComponent.getElement(), taskComponent.getElement());
+    replace(taskEditComponent, taskComponent);
   };
 
   const taskComponent = new TaskComponent(task);
@@ -48,19 +48,19 @@ const renderTask = (taskListElement, task) => {
 
   editForm.addEventListener(`submit`, replaceEditToTask);
 
-  render(taskListElement, taskComponent.getElement());
+  render(taskListElement, taskComponent);
 };
 
 const renderBoard = (boardComponent, tasks) => {
   const isAllTasksArchived = tasks.every((task) => task.isArchive);
 
   if (isAllTasksArchived) {
-    render(boardComponent.getElement(), new EmptyComponent().getElement());
+    render(boardComponent.getElement(), new EmptyComponent());
     return;
   }
 
-  render(boardComponent.getElement(), new SortingComponent().getElement());
-  render(boardComponent.getElement(), new TaskListComponent().getElement());
+  render(boardComponent.getElement(), new SortingComponent());
+  render(boardComponent.getElement(), new TaskListComponent());
 
   const taskListElement = siteMainElement.querySelector(`.board__tasks`);
 
@@ -68,7 +68,7 @@ const renderBoard = (boardComponent, tasks) => {
   tasks.slice(0, showingTasksCount).forEach((task) => renderTask(taskListElement, task));
 
   const loadMoreButtonComponent = new LoadMoreButtonComponent();
-  render(boardComponent.getElement(), loadMoreButtonComponent.getElement());
+  render(boardComponent.getElement(), loadMoreButtonComponent);
 
   loadMoreButtonComponent.getElement().addEventListener(`click`, () => {
     const prevTasksCount = showingTasksCount;
@@ -78,8 +78,7 @@ const renderBoard = (boardComponent, tasks) => {
       .forEach((task) => renderTask(taskListElement, task));
 
     if (showingTasksCount >= tasks.length) {
-      loadMoreButtonComponent.getElement().remove();
-      loadMoreButtonComponent.removeElement();
+      remove(loadMoreButtonComponent);
     }
   });
 };
@@ -87,13 +86,13 @@ const renderBoard = (boardComponent, tasks) => {
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
-render(siteHeaderElement, new SiteMenuComponent().getElement());
+render(siteHeaderElement, new SiteMenuComponent());
 
 const filters = generateFilters();
-render(siteMainElement, new FilterComponent(filters).getElement());
+render(siteMainElement, new FilterComponent(filters));
 
 const boardComponent = new BoardComponent();
-render(siteMainElement, boardComponent.getElement());
+render(siteMainElement, boardComponent);
 
 const tasks = generateTasks(TASK_COUNT);
 
