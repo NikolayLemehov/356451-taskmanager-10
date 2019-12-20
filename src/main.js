@@ -79,6 +79,7 @@ const renderBoard = (boardComponent, tasks) => {
 
     if (showingTasksCount >= tasks.length) {
       loadMoreButtonComponent.getElement().remove();
+      loadMoreButtonComponent.removeElement();
     }
   });
 };
