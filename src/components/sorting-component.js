@@ -27,7 +27,7 @@ export default class SortingComponent extends AbstractComponent {
     this.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
 
-      if (evt.target.tagName !== `A`) {
+      if (evt.target.classList.contains(`board__filter`)) {
         return;
       }
 
