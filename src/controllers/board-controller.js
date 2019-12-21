@@ -1,10 +1,11 @@
-import {remove, render, replace} from "../utils/render";
 import TaskComponent from "../components/task-component";
 import TaskEditComponent from "../components/task-edit-component";
 import EmptyComponent from "../components/empty-component";
-import SortingComponent, {SortType} from "../components/sorting-component";
+import SortingComponent from "../components/sorting-component";
 import TaskListComponent from "../components/task-list-component";
 import LoadMoreButtonComponent from "../components/load-more-button-component";
+import {remove, render, replace} from "../utils/render";
+import {SortType} from "../const";
 
 const ShowingTasksCount = {
   ON_START: 8,
