@@ -4,7 +4,7 @@ import EmptyComponent from "../components/empty-component";
 import SortingComponent from "../components/sorting-component";
 import TaskListComponent from "../components/task-list-component";
 import LoadMoreButtonComponent from "../components/load-more-button-component";
-import {remove, render, replace} from "../utils/render";
+import {removeElement, renderElement, replaceElement} from "../utils/render";
 import {SortType} from "../const";
 
 const ShowingTasksCount = {
@@ -34,11 +34,11 @@ export default class BoardController {
       };
 
       const replaceEditToTask = () => {
-        replace(taskComponent, taskEditComponent);
+        replaceElement(taskComponent, taskEditComponent);
       };
 
       const replaceTaskToEdit = () => {
-        replace(taskEditComponent, taskComponent);
+        replaceElement(taskEditComponent, taskComponent);
       };
 
       const taskComponent = new TaskComponent(task);
@@ -50,11 +50,11 @@ export default class BoardController {
       const taskEditComponent = new TaskEditComponent(task);
       taskEditComponent.setSubmitHandler(replaceEditToTask);
 
-      render(taskListElement, taskComponent);
+      renderElement(taskListElement, taskComponent);
     };
     const renderTasks = (taskListElement, tasks) => tasks.forEach((task) => renderTask(taskListElement, task));
     const renderLoadMoreButton = (tasks) => {
-      render(container, this._loadMoreButtonComponent);
+      renderElement(container, this._loadMoreButtonComponent);
 
       this._loadMoreButtonComponent.setClickHandler(() => {
         const prevTasksCount = showingTasksCount;
@@ -63,7 +63,7 @@ export default class BoardController {
         renderTasks(taskListElement, tasks.slice(prevTasksCount, showingTasksCount));
 
         if (showingTasksCount >= tasks.length) {
-          remove(this._loadMoreButtonComponent);
+          removeElement(this._loadMoreButtonComponent);
         }
       });
     };
@@ -71,12 +71,12 @@ export default class BoardController {
     const container = this._containerComponent.getElement();
     const isAllTasksArchived = this._tasks.every((task) => task.isArchive);
     if (isAllTasksArchived) {
-      render(container, this._emptyComponent);
+      renderElement(container, this._emptyComponent);
       return;
     }
 
-    render(container, this._sortingComponent);
-    render(container, this._taskListComponent);
+    renderElement(container, this._sortingComponent);
+    renderElement(container, this._taskListComponent);
 
     const taskListElement = this._taskListComponent.getElement();
 

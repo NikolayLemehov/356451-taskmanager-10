@@ -5,16 +5,16 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-const render = (container, component) => {
+const renderElement = (container, component) => {
   container.append(component.getElement());
 };
 
-const remove = (component) => {
+const removeElement = (component) => {
   component.getElement().remove();
   component.removeElement();
 };
 
-const replace = (newComponent, oldComponent) => {
+const replaceElement = (newComponent, oldComponent) => {
   const newElement = newComponent.getElement();
   const oldElement = oldComponent.getElement();
   const parentElement = oldElement.parentElement;
@@ -25,4 +25,4 @@ const replace = (newComponent, oldComponent) => {
   }
 };
 
-export {createElement, render, remove, replace};
+export {createElement, renderElement, removeElement, replaceElement};
