@@ -1,6 +1,6 @@
 import {monthNames} from "../const";
-import {formatTime} from "../utils";
-import {createElement} from "../utils";
+import {formatTime} from "../utils/common";
+import AbstractComponent from "./abstract-component";
 
 
 const createHashtagsMarkup = (hashtags) => {
@@ -20,14 +20,13 @@ const createHashtagsMarkup = (hashtags) => {
 const createTaskTemplate = (task) => {
   const {description, tags, dueDate, color, repeatingDays} = task;
 
-  const isExpired = dueDate < Date.now();
   const isDateShowing = !!dueDate;
-
   const date = isDateShowing ? `${dueDate.getDate()} ${monthNames[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
+  const isExpired = dueDate < Date.now() && !!dueDate;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
   return (
@@ -83,25 +82,18 @@ const createTaskTemplate = (task) => {
   );
 };
 
-export default class TaskComponent {
+export default class TaskComponent extends AbstractComponent {
   constructor(task) {
+    super();
     this._task = task;
-    this._element = null;
   }
 
   getTemplate() {
     return createTaskTemplate(this._task);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, handler);
   }
 }
