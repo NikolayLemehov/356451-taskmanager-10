@@ -53,16 +53,17 @@ export default class BoardController {
       renderElement(taskListElement, taskComponent);
     };
     const renderTasks = (taskListElement, tasks) => tasks.forEach((task) => renderTask(taskListElement, task));
-    const renderLoadMoreButton = (tasks) => {
-      renderElement(container, this._loadMoreButtonComponent);
-
+    const renderLoadMoreButton = () => {
+      if (showingTasksCount < sortedTasks.length) {
+        renderElement(container, this._loadMoreButtonComponent);
+      }
       this._loadMoreButtonComponent.setClickHandler(() => {
         const prevTasksCount = showingTasksCount;
         showingTasksCount = showingTasksCount + ShowingTasksCount.BY_BUTTON;
 
-        renderTasks(taskListElement, tasks.slice(prevTasksCount, showingTasksCount));
+        renderTasks(taskListElement, sortedTasks.slice(prevTasksCount, showingTasksCount));
 
-        if (showingTasksCount >= tasks.length) {
+        if (showingTasksCount >= sortedTasks.length) {
           removeElement(this._loadMoreButtonComponent);
         }
       });
@@ -82,11 +83,10 @@ export default class BoardController {
 
     let showingTasksCount = ShowingTasksCount.ON_START;
     renderTasks(taskListElement, this._tasks.slice(0, showingTasksCount));
-    renderLoadMoreButton(this._tasks);
+    let sortedTasks = this._tasks;
+    renderLoadMoreButton();
 
     this._sortingComponent.setSortTypeChangeHandler((sortType) => {
-      let sortedTasks = [];
-
       switch (sortType) {
         case SortType.DATE_UP:
           sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
@@ -100,9 +100,7 @@ export default class BoardController {
       }
 
       taskListElement.innerHTML = ``;
-      showingTasksCount = ShowingTasksCount.ON_START;
       renderTasks(taskListElement, sortedTasks.slice(0, showingTasksCount));
-      renderLoadMoreButton(sortedTasks);
     });
   }
 }
