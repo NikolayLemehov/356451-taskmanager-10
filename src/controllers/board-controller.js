@@ -1,10 +1,9 @@
-import TaskComponent from "../components/task-component";
-import TaskEditComponent from "../components/task-edit-component";
 import EmptyComponent from "../components/empty-component";
 import SortingComponent from "../components/sorting-component";
 import TaskListComponent from "../components/task-list-component";
 import LoadMoreButtonComponent from "../components/load-more-button-component";
-import {removeElement, renderElement, replaceElement} from "../utils/render";
+import TaskController from "./task-controller";
+import {removeElement, renderElement} from "../utils/render";
 import {SortType} from "../const";
 
 const ShowingTasksCount = {
@@ -23,36 +22,7 @@ export default class BoardController {
   }
 
   render() {
-    const renderTask = (taskListElement, task) => {
-      const onEscKeyDown = (evt) => {
-        const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-        if (isEscKey) {
-          replaceEditToTask();
-          document.removeEventListener(`keydown`, onEscKeyDown);
-        }
-      };
-
-      const replaceEditToTask = () => {
-        replaceElement(taskComponent, taskEditComponent);
-      };
-
-      const replaceTaskToEdit = () => {
-        replaceElement(taskEditComponent, taskComponent);
-      };
-
-      const taskComponent = new TaskComponent(task);
-      taskComponent.setEditButtonClickHandler(() => {
-        replaceTaskToEdit();
-        document.addEventListener(`keydown`, onEscKeyDown);
-      });
-
-      const taskEditComponent = new TaskEditComponent(task);
-      taskEditComponent.setSubmitHandler(replaceEditToTask);
-
-      renderElement(taskListElement, taskComponent);
-    };
-    const renderTasks = (taskListElement, tasks) => tasks.forEach((task) => renderTask(taskListElement, task));
+    const renderTasks = (tasks) => tasks.forEach((task) => taskController.render(task));
     const renderLoadMoreButton = () => {
       if (showingTasksCount < sortedTasks.length) {
         renderElement(container, this._loadMoreButtonComponent);
@@ -61,7 +31,7 @@ export default class BoardController {
         const prevTasksCount = showingTasksCount;
         showingTasksCount = showingTasksCount + ShowingTasksCount.BY_BUTTON;
 
-        renderTasks(taskListElement, sortedTasks.slice(prevTasksCount, showingTasksCount));
+        renderTasks(sortedTasks.slice(prevTasksCount, showingTasksCount));
 
         if (showingTasksCount >= sortedTasks.length) {
           removeElement(this._loadMoreButtonComponent);
@@ -80,9 +50,10 @@ export default class BoardController {
     renderElement(container, this._taskListComponent);
 
     const taskListElement = this._taskListComponent.getElement();
+    const taskController = new TaskController(taskListElement);
 
     let showingTasksCount = ShowingTasksCount.ON_START;
-    renderTasks(taskListElement, this._tasks.slice(0, showingTasksCount));
+    renderTasks(this._tasks.slice(0, showingTasksCount));
     let sortedTasks = this._tasks;
     renderLoadMoreButton();
 
@@ -100,7 +71,7 @@ export default class BoardController {
       }
 
       taskListElement.innerHTML = ``;
-      renderTasks(taskListElement, sortedTasks.slice(0, showingTasksCount));
+      renderTasks(sortedTasks.slice(0, showingTasksCount));
     });
   }
 }
