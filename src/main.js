@@ -21,5 +21,5 @@ renderElement(siteMainElement, boardComponent);
 
 const tasks = generateTasks(TASK_COUNT);
 
-const boardController = new BoardController(boardComponent, tasks);
-boardController.render();
+const boardController = new BoardController(boardComponent);
+boardController.render(tasks);
