@@ -6,10 +6,7 @@ import TaskController from "./task-controller";
 import {removeElement, renderElement} from "../utils/render";
 import {SortType} from "../const";
 
-const ShowingTasksCount = {
-  ON_START: 8,
-  BY_BUTTON: 8,
-};
+const SHOWING_TASKS_PER_PAGE = 8;
 
 export default class BoardController {
   constructor(containerComponent) {
@@ -23,7 +20,7 @@ export default class BoardController {
     this._taskListElement = this._taskListComponent.getElement();
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
 
-    this._showingTasksCount = ShowingTasksCount.ON_START;
+    this._showingTasksCount = SHOWING_TASKS_PER_PAGE;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
@@ -49,10 +46,10 @@ export default class BoardController {
     this._sortingComponent.setSortTypeChangeHandler((sortType) => {
       switch (sortType) {
         case SortType.DATE_UP:
-          this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate - b.dueDate);
+          this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate.getTime() - b.dueDate).getTime();
           break;
         case SortType.DATE_DOWN:
-          this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate - a.dueDate);
+          this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate.getTime() - a.dueDate.getTime());
           break;
         case SortType.DEFAULT:
           this._sortedTasks = this._tasks.slice();
@@ -79,7 +76,7 @@ export default class BoardController {
     }
     this._loadMoreButtonComponent.setClickHandler(() => {
       const prevTasksCount = this._showingTasksCount;
-      this._showingTasksCount += ShowingTasksCount.BY_BUTTON;
+      this._showingTasksCount += SHOWING_TASKS_PER_PAGE;
 
       const newTaskControllers = this._renderTasks(this._sortedTasks.slice(prevTasksCount, this._showingTasksCount), this._onDataChange, this._onViewChange);
       this._showedTaskControllers = this._showedTaskControllers.concat(newTaskControllers);
