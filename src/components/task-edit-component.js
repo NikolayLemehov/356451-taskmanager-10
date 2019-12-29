@@ -140,7 +140,7 @@ const createTaskEditTemplate = (task, options = {}) => {
                 ${isDateShowing ? dateElement : ``}
 
                 <button class="card__repeat-toggle" type="button">
-                  repeat:<span class="card__repeat-status">yes</span>
+                  repeat:<span class="card__repeat-status">${isRepeatingTask ? `yes` : `no`}</span>
                 </button>
                 
                 ${isRepeatingTask ? repeatingDaysElement : ``}
