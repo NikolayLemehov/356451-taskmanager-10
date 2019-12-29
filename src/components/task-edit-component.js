@@ -241,7 +241,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
       this._flatpickr = flatpickr(dateElement, {
         altInput: true,
         allowInput: true,
-        defaultDate: this._task.dueDate,
+        defaultDate: this._task.dueDate === null ? new Date() : this._task.dueDate,
       });
     }
   }
