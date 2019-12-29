@@ -46,10 +46,10 @@ export default class BoardController {
     this._sortingComponent.setSortTypeChangeHandler((sortType) => {
       switch (sortType) {
         case SortType.DATE_UP:
-          this._sortedTasks = this._tasks.slice().sort((a, b) => a.dueDate.getTime() - b.dueDate).getTime();
+          this._sortedTasks = this._tasks.slice().sort((a, b) => (a.dueDate === null ? null : a.dueDate.getTime()) - (b.dueDate === null ? null : b.dueDate));
           break;
         case SortType.DATE_DOWN:
-          this._sortedTasks = this._tasks.slice().sort((a, b) => b.dueDate.getTime() - a.dueDate.getTime());
+          this._sortedTasks = this._tasks.slice().sort((a, b) => (b.dueDate === null ? null : b.dueDate.getTime()) - (a.dueDate === null ? null : a.dueDate));
           break;
         case SortType.DEFAULT:
           this._sortedTasks = this._tasks.slice();

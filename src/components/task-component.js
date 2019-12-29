@@ -18,7 +18,7 @@ const createHashtagsMarkup = (hashtags) => {
 };
 
 const createTaskTemplate = (task) => {
-  const {description, dueDate, repeatingDays, tags, color, isArchive, isFavorite} = task;
+  const {id, description, dueDate, repeatingDays, tags, color, isArchive, isFavorite} = task;
 
   const isDateShowing = !!dueDate;
   const date = isDateShowing ? `${dueDate.getDate()} ${monthNames[dueDate.getMonth()]}` : ``;
@@ -54,7 +54,7 @@ const createTaskTemplate = (task) => {
           </div>
 
           <div class="card__textarea-wrap">
-            <p class="card__text">${description}</p>
+            <p class="card__text">${id}. ${description}</p>
           </div>
 
           <div class="card__settings">
