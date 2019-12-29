@@ -19,6 +19,7 @@ export default class TaskController {
     this._taskEditComponent = null;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._replaceEditToTask = this._replaceEditToTask.bind(this);
   }
 
   render(task) {
@@ -45,10 +46,7 @@ export default class TaskController {
       }));
     });
 
-    this._taskEditComponent.setSubmitHandler((evt) => {
-      evt.preventDefault();
-      this._replaceEditToTask();
-    });
+    this._taskEditComponent.setSubmitHandler(this._replaceEditToTask);
 
     if (oldTaskEditComponent && oldTaskComponent) {
       replaceElement(this._taskComponent, oldTaskComponent);
@@ -65,7 +63,9 @@ export default class TaskController {
   }
 
   _replaceEditToTask() {
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, () => {
+      this._onEscKeyDown();
+    });
 
     this._taskEditComponent.reset();
     replaceElement(this._taskComponent, this._taskEditComponent);
@@ -83,7 +83,9 @@ export default class TaskController {
 
     if (isEscKey) {
       this._replaceEditToTask();
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+      document.removeEventListener(`keydown`, () => {
+        this._onEscKeyDown();
+      });
     }
   }
 }
