@@ -26,6 +26,7 @@ export default class BoardController {
     this._showingTasksCount = ShowingTasksCount.ON_START;
 
     this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
   }
 
   render(tasks) {
@@ -41,7 +42,7 @@ export default class BoardController {
     renderElement(this._container, this._taskListComponent);
 
 
-    const newTaskControllers = this._renderTasks(this._tasks.slice(0, this._showingTasksCount), this._onDataChange);
+    const newTaskControllers = this._renderTasks(this._tasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
     this._showedTaskControllers = this._showedTaskControllers.concat(newTaskControllers);
     this._renderLoadMoreButton();
 
@@ -59,13 +60,13 @@ export default class BoardController {
       }
 
       this._taskListElement.innerHTML = ``;
-      this._showedTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount), this._onDataChange);
+      this._showedTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
     });
   }
 
-  _renderTasks(tasks, onDataChange) {
+  _renderTasks(tasks, onDataChange, onViewChange) {
     return tasks.map((task) => {
-      const taskController = new TaskController(this._taskListElement, onDataChange);
+      const taskController = new TaskController(this._taskListElement, onDataChange, onViewChange);
       taskController.render(task);
 
       return taskController;
@@ -80,7 +81,7 @@ export default class BoardController {
       const prevTasksCount = this._showingTasksCount;
       this._showingTasksCount += ShowingTasksCount.BY_BUTTON;
 
-      const newTaskControllers = this._renderTasks(this._sortedTasks.slice(prevTasksCount, this._showingTasksCount), this._onDataChange);
+      const newTaskControllers = this._renderTasks(this._sortedTasks.slice(prevTasksCount, this._showingTasksCount), this._onDataChange, this._onViewChange);
       this._showedTaskControllers = this._showedTaskControllers.concat(newTaskControllers);
 
       if (this._showingTasksCount >= this._sortedTasks.length) {
@@ -99,5 +100,9 @@ export default class BoardController {
     this._tasks = [].concat(this._tasks.slice(0, index), newTask, this._tasks.slice(index + 1));
 
     taskController.render(this._tasks[index]);
+  }
+
+  _onViewChange() {
+    this._showedTaskControllers.forEach((it) => it.setDefaultView());
   }
 }
