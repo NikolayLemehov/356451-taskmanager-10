@@ -78,7 +78,7 @@ const createTaskEditTemplate = (task, options = {}) => {
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
-  (isRepeatingTask && !Object.values(repeatingDays)) ? `disabled style='color: red;'` : ``;
+  (isRepeatingTask && !Object.values(repeatingDays).some((it) => it === true)) ? `disabled style='color: red;'` : ``;
 
   const date = isDateShowing && !!dueDate ? formatDate(dueDate) : ``;
   const time = isDateShowing && !!dueDate ? formatTime(dueDate) : ``;
