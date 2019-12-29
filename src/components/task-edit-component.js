@@ -79,8 +79,8 @@ const createTaskEditTemplate = (task, options = {}) => {
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
   (isRepeatingTask && !Object.values(repeatingDays)) ? `disabled style='color: red;'` : ``;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${monthNames[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const date = isDateShowing && !!dueDate ? `${dueDate.getDate()} ${monthNames[dueDate.getMonth()]}` : ``;
+  const time = isDateShowing && !!dueDate ? formatTime(dueDate) : ``;
 
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
