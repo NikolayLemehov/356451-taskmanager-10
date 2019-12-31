@@ -46,7 +46,12 @@ export default class TaskController {
       }));
     });
 
-    this._taskEditComponent.setSubmitHandler(this._replaceEditToTask);
+    this._taskEditComponent.setSubmitHandler((evt) => {
+      evt.preventDefault();
+      const data = this._taskEditComponent.getData();
+      this._onDataChange(this, task, Object.assign({}, task, data));
+      this._replaceEditToTask();
+    });
 
     if (oldTaskEditComponent && oldTaskComponent) {
       replaceElement(this._taskComponent, oldTaskComponent);

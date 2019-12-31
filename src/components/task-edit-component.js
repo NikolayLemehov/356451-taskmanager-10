@@ -181,6 +181,25 @@ const createTaskEditTemplate = (task, options = {}) => {
   );
 };
 
+const parseFormData = (formData) => {
+  const repeatingDays = days.reduce((acc, day) => {
+    acc[day] = false;
+    return acc;
+  }, {});
+  const date = formData.get(`date`);
+
+  return {
+    description: formData.get(`text`),
+    color: formData.get(`color`),
+    tags: formData.getAll(`hashtag`),
+    dueDate: date ? new Date(date) : null,
+    repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
+      acc[it] = true;
+      return acc;
+    }, repeatingDays),
+  };
+};
+
 export default class TaskEditComponent extends AbstractSmartComponent {
   constructor(task) {
     super();
@@ -224,12 +243,16 @@ export default class TaskEditComponent extends AbstractSmartComponent {
     this.rerender();
   }
 
+  getData() {
+    const form = this.getElement().querySelector(`.card__form`);
+    const formData = new FormData(form);
+
+    return parseFormData(formData);
+  }
+
   setSubmitHandler(handler) {
     this.getElement().querySelector(`form`)
-      .addEventListener(`submit`, (evt) => {
-        evt.preventDefault();
-        handler();
-      });
+      .addEventListener(`submit`, handler);
     this._submitHandler = handler;
   }
 
