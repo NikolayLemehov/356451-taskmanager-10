@@ -5,6 +5,7 @@ import TaskEditComponent from "../components/task-edit-component";
 const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
+  ADDING: `adding`,
 };
 
 export default class TaskController {
