@@ -19,9 +19,16 @@ const tags = [
   `keks`
 ];
 
+const TagCount = {
+  MIN: 0,
+  MAX: 3,
+};
+
 const getRandomIntegerNumber = (min, max) => {
   return Math.floor(min + Math.random() * (max + 1 - min));
 };
+
+const getRandomBoolean = () => Math.random() < 0.5;
 
 const getRandomArrayItem = (array) => {
   const randomIndex = getRandomIntegerNumber(0, array.length - 1);
@@ -31,7 +38,7 @@ const getRandomArrayItem = (array) => {
 
 const getRandomDate = () => {
   const targetDate = new Date();
-  const sign = Math.random() < 0.5 ? -1 : 1;
+  const sign = getRandomBoolean() ? -1 : 1;
   const diffValue = sign * getRandomIntegerNumber(0, 7);
 
   targetDate.setDate(targetDate.getDate() + diffValue);
@@ -41,27 +48,28 @@ const getRandomDate = () => {
 
 const generateRepeatingDays = () => {
   return Object.assign({}, defaultRepeatingDayWeek, {
-    [getRandomArrayItem(Object.keys(defaultRepeatingDayWeek))]: Math.random() < 0.5
+    [getRandomArrayItem(Object.keys(defaultRepeatingDayWeek))]: getRandomBoolean()
   });
 };
 
 const generateTags = (array) => {
   return array
-    .filter(() => Math.random() < 0.5)
-    .slice(0, 3);
+    .filter(() => getRandomBoolean())
+    .slice(TagCount.MIN, TagCount.MAX);
 };
 
-const generateTask = () => {
-  const dueDate = Math.random() < 0.5 ? null : getRandomDate();
+const generateTask = (it, i) => {
+  const dueDate = getRandomBoolean() ? null : getRandomDate();
 
   return {
+    id: i,
     description: getRandomArrayItem(descriptionItems),
     dueDate,
     repeatingDays: dueDate ? defaultRepeatingDayWeek : generateRepeatingDays(),
     tags: new Set(generateTags(tags)),
     color: getRandomArrayItem(colors),
-    isFavorite: Math.random() < 0.5,
-    isArchive: Math.random() < 0.5,
+    isArchive: getRandomBoolean(),
+    isFavorite: getRandomBoolean(),
   };
 };
 

@@ -18,7 +18,7 @@ const createHashtagsMarkup = (hashtags) => {
 };
 
 const createTaskTemplate = (task) => {
-  const {description, tags, dueDate, color, repeatingDays} = task;
+  const {id, description, dueDate, repeatingDays, tags, color, isArchive, isFavorite} = task;
 
   const isDateShowing = !!dueDate;
   const date = isDateShowing ? `${dueDate.getDate()} ${monthNames[dueDate.getMonth()]}` : ``;
@@ -28,6 +28,8 @@ const createTaskTemplate = (task) => {
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const isExpired = dueDate < Date.now() && !!dueDate;
   const deadlineClass = isExpired ? `card--deadline` : ``;
+  const isArchiveClass = isArchive ? `` : `card__btn--disabled`;
+  const isFavoriteClass = isFavorite ? `` : `card__btn--disabled`;
 
   return (
     `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
@@ -37,13 +39,10 @@ const createTaskTemplate = (task) => {
             <button type="button" class="card__btn card__btn--edit">
               edit
             </button>
-            <button type="button" class="card__btn card__btn--archive">
+            <button type="button" class="card__btn card__btn--archive ${isArchiveClass}">
               archive
             </button>
-            <button
-              type="button"
-              class="card__btn card__btn--favorites card__btn--disabled"
-            >
+            <button type="button" class="card__btn card__btn--favorites ${isFavoriteClass}">
               favorites
             </button>
           </div>
@@ -55,7 +54,7 @@ const createTaskTemplate = (task) => {
           </div>
 
           <div class="card__textarea-wrap">
-            <p class="card__text">${description}</p>
+            <p class="card__text">${id}. ${description}</p>
           </div>
 
           <div class="card__settings">
@@ -94,6 +93,16 @@ export default class TaskComponent extends AbstractComponent {
 
   setEditButtonClickHandler(handler) {
     this.getElement().querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, handler);
+  }
+
+  setArchiveButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--archive`)
+      .addEventListener(`click`, handler);
+  }
+
+  setFavoritesButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--favorites`)
       .addEventListener(`click`, handler);
   }
 }
