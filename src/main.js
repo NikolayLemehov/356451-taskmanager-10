@@ -7,7 +7,7 @@ import {generateFilters} from './mock/filter.js';
 import {renderElement} from "./utils/render";
 import BoardController from "./controllers/board-controller";
 
-const TASK_COUNT = 22;
+const TASK_COUNT = 21;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
