@@ -25,6 +25,9 @@ export default class BoardController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
+
+    this._sortingComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
   render() {
@@ -43,23 +46,6 @@ export default class BoardController {
     const newTaskControllers = this._renderTasks(tasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
     this._showedTaskControllers = this._showedTaskControllers.concat(newTaskControllers);
     this._renderLoadMoreButton();
-
-    this._sortingComponent.setSortTypeChangeHandler((sortType) => {
-      switch (sortType) {
-        case SortType.DATE_UP:
-          this._sortedTasks = this._tasksModel.getTasks().slice().sort((a, b) => (a.dueDate === null ? null : a.dueDate.getTime()) - (b.dueDate === null ? null : b.dueDate));
-          break;
-        case SortType.DATE_DOWN:
-          this._sortedTasks = this._tasksModel.getTasks().slice().sort((a, b) => (b.dueDate === null ? null : b.dueDate.getTime()) - (a.dueDate === null ? null : a.dueDate));
-          break;
-        case SortType.DEFAULT:
-          this._sortedTasks = this._tasksModel.getTasks().slice();
-          break;
-      }
-
-      this._taskListElement.innerHTML = ``;
-      this._showedTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
-    });
   }
 
   _renderTasks(tasks, onDataChange, onViewChange) {
@@ -99,5 +85,22 @@ export default class BoardController {
 
   _onViewChange() {
     this._showedTaskControllers.forEach((it) => it.setDefaultView());
+  }
+
+  _onSortTypeChange(sortType) {
+    switch (sortType) {
+      case SortType.DATE_UP:
+        this._sortedTasks = this._tasksModel.getTasks().slice().sort((a, b) => (a.dueDate === null ? null : a.dueDate.getTime()) - (b.dueDate === null ? null : b.dueDate));
+        break;
+      case SortType.DATE_DOWN:
+        this._sortedTasks = this._tasksModel.getTasks().slice().sort((a, b) => (b.dueDate === null ? null : b.dueDate.getTime()) - (a.dueDate === null ? null : a.dueDate));
+        break;
+      case SortType.DEFAULT:
+        this._sortedTasks = this._tasksModel.getTasks().slice();
+        break;
+    }
+
+    this._taskListElement.innerHTML = ``;
+    this._showedTaskControllers = this._renderTasks(this._sortedTasks.slice(0, this._showingTasksCount), this._onDataChange, this._onViewChange);
   }
 }
