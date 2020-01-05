@@ -1,5 +1,7 @@
 import AbstractComponent from "./abstract-component";
 
+const FILTER_ID_PREFIX = `filter__`;
+
 const createFilterMarkup = ({name, count}, isChecked) => {
   return (
     `<input
@@ -33,5 +35,12 @@ export default class FilterComponent extends AbstractComponent {
 
   getTemplate() {
     return createFilterTemplate(this._filters);
+  }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().addEventListener(`change`, (evt) => {
+      const filterType = evt.target.id.substring(FILTER_ID_PREFIX.length);
+      handler(filterType);
+    });
   }
 }

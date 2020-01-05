@@ -23,4 +23,14 @@ const SortType = {
   DATE_DOWN: `date-down`,
 };
 
-export {colors, days, monthNames, SortType};
+const FilterType = {
+  ALL: `all`,
+  ARCHIVE: `archive`,
+  FAVORITES: `favorites`,
+  OVERDUE: `overdue`,
+  REPEATING: `repeating`,
+  TAGS: `tags`,
+  TODAY: `today`,
+};
+
+export {colors, days, monthNames, SortType, FilterType};
