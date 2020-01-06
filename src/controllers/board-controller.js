@@ -34,7 +34,7 @@ export default class BoardController {
   }
 
   render() {
-    const tasks = this._tasksModel.getTasksAll();
+    const tasks = this._tasksModel.getTasks();
     this._sortedTasks = tasks.slice();
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
     if (isAllTasksArchived) {
