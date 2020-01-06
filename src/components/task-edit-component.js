@@ -3,6 +3,18 @@ import {colors, days} from '../const.js';
 import {formatTime, formatDate} from '../utils/common';
 import AbstractSmartComponent from "./abstract-smart-component";
 
+const DescriptionLength = {
+  MIN: 1,
+  MAX: 140,
+};
+
+const getIsAllowableDescriptionLength = (description) => {
+  const length = description.length;
+
+  return length >= DescriptionLength.MIN &&
+    length <= DescriptionLength.MAX;
+};
+
 const createColorsMarkup = (currentColor) => {
   return colors
     .map((color) => {
@@ -73,12 +85,13 @@ const createHashtags = (tags) => {
 };
 
 const createTaskEditTemplate = (task, options = {}) => {
-  const {description, tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, repeatingDays} = options;
+  const {tags, dueDate, color} = task;
+  const {isDateShowing, isRepeatingTask, repeatingDays, description} = options;
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
-  (isRepeatingTask && !Object.values(repeatingDays).some((it) => it === true)) ? `disabled style='color: red;'` : ``;
+  (isRepeatingTask && !Object.values(repeatingDays).some((it) => it === true) ||
+    !getIsAllowableDescriptionLength(description)) ? `disabled style='color: red;'` : ``;
 
   const date = isDateShowing && !!dueDate ? formatDate(dueDate) : ``;
   const time = isDateShowing && !!dueDate ? formatTime(dueDate) : ``;
@@ -207,6 +220,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._repeatingDays = Object.assign({}, task.repeatingDays);
+    this._description = task.description;
     this._flatpickr = null;
     this._submitHandler = null;
 
@@ -219,6 +233,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
       repeatingDays: this._repeatingDays,
+      description: this._description,
     });
   }
 
@@ -239,6 +254,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
     this._isDateShowing = !!task.dueDate;
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._repeatingDays = Object.assign({}, task.repeatingDays);
+    this._description = task.description;
 
     this.rerender();
   }
@@ -274,6 +290,14 @@ export default class TaskEditComponent extends AbstractSmartComponent {
 
   _subscribeOnEvents() {
     const element = this.getElement();
+
+    element.querySelector(`.card__text`)
+      .addEventListener(`input`, (evt) => {
+        this._description = evt.target.value;
+
+        this._markSaveButton(!getIsAllowableDescriptionLength(this._description));
+      });
+
     element.querySelector(`.card__date-deadline-toggle`)
       .addEventListener(`click`, () => {
         this._isDateShowing = !this._isDateShowing;
@@ -296,5 +320,16 @@ export default class TaskEditComponent extends AbstractSmartComponent {
         this.rerender();
       });
     }
+  }
+
+  _markSaveButton(isAllowableDescriptionLength) {
+    const saveButton = this.getElement().querySelector(`.card__save`);
+    saveButton.disabled = isAllowableDescriptionLength;
+    if (isAllowableDescriptionLength) {
+      saveButton.style.color = `red`;
+    } else {
+      saveButton.style.color = ``;
+    }
+
   }
 }
