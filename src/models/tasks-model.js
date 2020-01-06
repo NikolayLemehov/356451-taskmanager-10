@@ -55,6 +55,10 @@ export default class TasksModel {
     return true;
   }
 
+  removeTask(id) {
+    return this.updateTask(id, []);
+  }
+
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
   }

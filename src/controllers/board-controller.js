@@ -95,10 +95,15 @@ export default class BoardController {
   }
 
   _onDataChange(taskController, oldTask, newTask) {
-    const isSuccess = this._tasksModel.updateTask(oldTask.id, newTask);
+    if (newTask === null) {
+      this._tasksModel.removeTask(oldTask.id);
+      this._updateTasks(this._showingTasksCount);
+    } else {
+      const isSuccess = this._tasksModel.updateTask(oldTask.id, newTask);
 
-    if (isSuccess) {
-      taskController.render(newTask);
+      if (isSuccess) {
+        taskController.render(newTask);
+      }
     }
   }
 

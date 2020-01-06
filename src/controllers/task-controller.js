@@ -53,6 +53,7 @@ export default class TaskController {
       this._onDataChange(this, task, Object.assign({}, task, data));
       this._replaceEditToTask();
     });
+    this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
 
     if (oldTaskEditComponent && oldTaskComponent) {
       replaceElement(this._taskComponent, oldTaskComponent);
