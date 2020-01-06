@@ -27,16 +27,12 @@ export default class TasksModel {
     this._callHandlers(this._filterChangeHandlers);
   }
 
-  getActiveFilter() {
-    return this._activeFilterType;
-  }
-
-  getFilters(activeFilterType) {
+  getFilters() {
     return Object.values(FilterType).map((filterType) => {
       return {
         name: filterType,
         count: getTasksByFilter(this.getTasksAll(), filterType).length,
-        checked: filterType === activeFilterType,
+        isChecked: filterType === this._activeFilterType,
       };
     });
   }

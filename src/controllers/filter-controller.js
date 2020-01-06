@@ -6,7 +6,6 @@ export default class FilterController {
     this._container = container;
     this._tasksModel = tasksModel;
 
-    this._activeFilterType = tasksModel.getActiveFilter();
     this._filterComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
@@ -16,7 +15,7 @@ export default class FilterController {
   }
 
   render() {
-    const filters = this._tasksModel.getFilters(this._activeFilterType);
+    const filters = this._tasksModel.getFilters();
     const oldComponent = this._filterComponent;
 
     this._filterComponent = new FilterComponent(filters);
@@ -31,7 +30,6 @@ export default class FilterController {
 
   _onFilterChange(filterType) {
     this._tasksModel.setFilter(filterType);
-    this._activeFilterType = filterType;
   }
 
   _onDataChange() {
