@@ -7,6 +7,7 @@ const DescriptionLength = {
   MIN: 1,
   MAX: 140,
 };
+const RED_COLOR_STYLE_PROPERTY = `color: red;`;
 
 const getIsAllowableDescriptionLength = (description) => {
   const length = description.length;
@@ -91,7 +92,7 @@ const createTaskEditTemplate = (task, options = {}) => {
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
   (isRepeatingTask && !Object.values(repeatingDays).some((it) => it === true) ||
-    !getIsAllowableDescriptionLength(description)) ? `disabled style='color: red;'` : ``;
+    !getIsAllowableDescriptionLength(description)) ? `disabled style='${RED_COLOR_STYLE_PROPERTY}'` : ``;
 
   const date = isDateShowing && !!dueDate ? formatDate(dueDate) : ``;
   const time = isDateShowing && !!dueDate ? formatTime(dueDate) : ``;
@@ -223,6 +224,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
     this._description = task.description;
     this._flatpickr = null;
     this._submitHandler = null;
+    this._deleteButtonClickHandler = null;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -239,6 +241,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
     this._subscribeOnEvents();
   }
 
@@ -272,6 +275,13 @@ export default class TaskEditComponent extends AbstractSmartComponent {
     this._submitHandler = handler;
   }
 
+  setDeleteButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__delete`)
+      .addEventListener(`click`, handler);
+
+    this._deleteButtonClickHandler = handler;
+  }
+
   _applyFlatpickr() {
     if (this._flatpickr) {
       this._flatpickr.destroy();
@@ -295,7 +305,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
       .addEventListener(`input`, (evt) => {
         this._description = evt.target.value;
 
-        this._markSaveButton(!getIsAllowableDescriptionLength(this._description));
+        this._markSaveButton(getIsAllowableDescriptionLength(this._description));
       });
 
     element.querySelector(`.card__date-deadline-toggle`)
@@ -324,11 +334,11 @@ export default class TaskEditComponent extends AbstractSmartComponent {
 
   _markSaveButton(isAllowableDescriptionLength) {
     const saveButton = this.getElement().querySelector(`.card__save`);
-    saveButton.disabled = isAllowableDescriptionLength;
+    saveButton.disabled = !isAllowableDescriptionLength;
     if (isAllowableDescriptionLength) {
-      saveButton.style.color = `red`;
+      saveButton.style.cssText = ``;
     } else {
-      saveButton.style.color = ``;
+      saveButton.style.cssText = RED_COLOR_STYLE_PROPERTY;
     }
 
   }
