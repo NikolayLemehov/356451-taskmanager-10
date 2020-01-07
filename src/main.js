@@ -11,7 +11,8 @@ const TASK_COUNT = 41;
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
-renderElement(siteHeaderElement, new SiteMenuComponent());
+const siteMenuComponent = new SiteMenuComponent();
+renderElement(siteHeaderElement, siteMenuComponent);
 const tasks = generateTasks(TASK_COUNT);
 const tasksModel = new TasksModel();
 tasksModel.setTasks(tasks);
@@ -24,3 +25,7 @@ renderElement(siteMainElement, boardComponent);
 
 const boardController = new BoardController(boardComponent, tasksModel);
 boardController.render();
+
+siteMenuComponent.setOnChange(() => {
+  boardController.createTask();
+});

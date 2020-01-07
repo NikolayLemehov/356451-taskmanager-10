@@ -55,6 +55,11 @@ export default class TasksModel {
     return this.updateTask(id, []);
   }
 
+  addTask(task) {
+    this._tasks = [].concat(task, this._tasks);
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
   setFilterChangeHandler(handler) {
     this._filterChangeHandlers.push(handler);
   }

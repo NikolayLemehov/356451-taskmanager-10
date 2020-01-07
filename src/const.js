@@ -1,6 +1,28 @@
-const colors = [`black`, `yellow`, `blue`, `green`, `pink`];
+const Color = {
+  BLACK: `black`,
+  YELLOW: `yellow`,
+  BLUE: `blue`,
+  GREEN: `green`,
+  PINK: `pink`,
+};
+
+const colors = Array.from(Object.values(Color)).map((it) => it);
 
 const days = [`mo`, `tu`, `we`, `th`, `fr`, `sa`, `su`];
+
+const EmptyTask = {
+  id: `new`,
+  description: ``,
+  dueDate: null,
+  repeatingDays: days.reduce((acc, it) => {
+    acc[it] = false;
+    return acc;
+  }, {}),
+  tags: [],
+  color: Color.BLACK,
+  isFavorite: false,
+  isArchive: false,
+};
 
 const monthNames = [
   `January`,
@@ -33,4 +55,4 @@ const FilterType = {
   TODAY: `today`,
 };
 
-export {colors, days, monthNames, SortType, FilterType};
+export {colors, days, EmptyTask, monthNames, SortType, FilterType};

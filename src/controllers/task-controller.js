@@ -1,8 +1,9 @@
-import {removeElement, renderElement, replaceElement} from "../utils/render";
+import {RenderPosition, removeElement, renderElement, replaceElement} from "../utils/render";
+import {EmptyTask} from "../const";
 import TaskComponent from "../components/task-component";
 import TaskEditComponent from "../components/task-edit-component";
 
-const Mode = {
+export const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
   ADDING: `adding`,
@@ -23,9 +24,10 @@ export default class TaskController {
     this._replaceEditToTask = this._replaceEditToTask.bind(this);
   }
 
-  render(task) {
+  render(task, mode) {
     const oldTaskComponent = this._taskComponent;
     const oldTaskEditComponent = this._taskEditComponent;
+    this._mode = mode;
 
     this._taskComponent = new TaskComponent(task);
     this._taskEditComponent = new TaskEditComponent(task);
@@ -55,11 +57,23 @@ export default class TaskController {
     });
     this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
 
-    if (oldTaskEditComponent && oldTaskComponent) {
-      replaceElement(this._taskComponent, oldTaskComponent);
-      replaceElement(this._taskEditComponent, oldTaskEditComponent);
-    } else {
-      renderElement(this._container, this._taskComponent);
+    switch (mode) {
+      case Mode.DEFAULT:
+        if (oldTaskEditComponent && oldTaskComponent) {
+          replaceElement(this._taskComponent, oldTaskComponent);
+          replaceElement(this._taskEditComponent, oldTaskEditComponent);
+        } else {
+          renderElement(this._container, this._taskComponent);
+        }
+        break;
+      case Mode.ADDING:
+        if (oldTaskEditComponent && oldTaskComponent) {
+          removeElement(oldTaskComponent);
+          removeElement(oldTaskEditComponent);
+        }
+        document.addEventListener(`keydown`, this._onEscKeyDown);
+        renderElement(this._container, this._taskEditComponent, RenderPosition.AFTERBEGIN);
+        break;
     }
   }
 
@@ -76,9 +90,7 @@ export default class TaskController {
   }
 
   _replaceEditToTask() {
-    document.removeEventListener(`keydown`, () => {
-      this._onEscKeyDown();
-    });
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
 
     this._taskEditComponent.reset();
     replaceElement(this._taskComponent, this._taskEditComponent);
@@ -95,10 +107,10 @@ export default class TaskController {
     const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
 
     if (isEscKey) {
+      if (this._mode === Mode.ADDING) {
+        this._onDataChange(this, EmptyTask, null);
+      }
       this._replaceEditToTask();
-      document.removeEventListener(`keydown`, () => {
-        this._onEscKeyDown();
-      });
     }
   }
 }
