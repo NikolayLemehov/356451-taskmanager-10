@@ -335,11 +335,6 @@ export default class TaskEditComponent extends AbstractSmartComponent {
   _markSaveButton(isAllowableDescriptionLength) {
     const saveButton = this.getElement().querySelector(`.card__save`);
     saveButton.disabled = !isAllowableDescriptionLength;
-    if (isAllowableDescriptionLength) {
-      saveButton.style.cssText = ``;
-    } else {
-      saveButton.style.cssText = RED_COLOR_STYLE_PROPERTY;
-    }
-
+    saveButton.style.cssText = isAllowableDescriptionLength ? `` : RED_COLOR_STYLE_PROPERTY;
   }
 }
