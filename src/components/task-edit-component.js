@@ -87,12 +87,12 @@ const createHashtags = (tags) => {
 
 const createTaskEditTemplate = (task, options = {}) => {
   const {tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, repeatingDays, description} = options;
+  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = options;
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
   (isRepeatingTask && !Object.values(repeatingDays).some((it) => it === true) ||
-    !getIsAllowableDescriptionLength(description)) ? `disabled style='${RED_COLOR_STYLE_PROPERTY}'` : ``;
+    !getIsAllowableDescriptionLength(notSanitizedDescription)) ? `disabled style='${RED_COLOR_STYLE_PROPERTY}'` : ``;
 
   const date = isDateShowing && !!dueDate ? formatDate(dueDate) : ``;
   const time = isDateShowing && !!dueDate ? formatTime(dueDate) : ``;
@@ -141,7 +141,7 @@ const createTaskEditTemplate = (task, options = {}) => {
                 class="card__text"
                 placeholder="Start typing your text here..."
                 name="text"
-              >${description}</textarea>
+              >${window.he.encode(notSanitizedDescription)}</textarea>
             </label>
           </div>
 
