@@ -1,14 +1,40 @@
-export default class Tasks {
+import {FilterType} from '../const.js';
+import {getTasksByFilter} from "../utils/filter";
+
+export default class TasksModel {
   constructor() {
     this._tasks = [];
+    this._activeFilterType = FilterType.ALL;
+
+    this._dataChangeHandlers = [];
+    this._filterChangeHandlers = [];
   }
 
   getTasks() {
+    return getTasksByFilter(this._tasks, this._activeFilterType);
+  }
+
+  getTasksAll() {
     return this._tasks;
   }
 
   setTasks(tasks) {
     this._tasks = Array.from(tasks);
+  }
+
+  setFilter(filterType) {
+    this._activeFilterType = filterType;
+    this._callHandlers(this._filterChangeHandlers);
+  }
+
+  getFilters() {
+    return Object.values(FilterType).map((filterType) => {
+      return {
+        name: filterType,
+        count: getTasksByFilter(this.getTasksAll(), filterType).length,
+        isChecked: filterType === this._activeFilterType,
+      };
+    });
   }
 
   updateTask(id, task) {
@@ -20,6 +46,29 @@ export default class Tasks {
 
     this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
 
+    this._callHandlers(this._dataChangeHandlers);
+
     return true;
+  }
+
+  removeTask(id) {
+    return this.updateTask(id, []);
+  }
+
+  addTask(task) {
+    this._tasks = [].concat(task, this._tasks);
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
+  setFilterChangeHandler(handler) {
+    this._filterChangeHandlers.push(handler);
+  }
+
+  setDataChangeHandler(handler) {
+    this._dataChangeHandlers.push(handler);
+  }
+
+  _callHandlers(handlers) {
+    handlers.forEach((handler) => handler());
   }
 }
