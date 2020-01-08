@@ -9,9 +9,8 @@ const formatDate = (date) => {
 };
 
 const getIsOneDay = (dateA, dateB) => {
-  const a = moment(dateA);
-  const b = moment(dateB);
-  return a.diff(b, `days`) === 0 && dateA.getDate() === dateB.getDate();
+  const FORMAT = `DD MM YYYY`;
+  return moment(dateA).format(FORMAT) === moment(dateB).format(FORMAT);
 };
 
 const getIsOverdueDate = (dueDate, date) => {
