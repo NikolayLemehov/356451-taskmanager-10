@@ -1,3 +1,5 @@
+import {getNoRepeatingDays} from "./utils/common";
+
 const Color = {
   BLACK: `black`,
   YELLOW: `yellow`,
@@ -14,10 +16,7 @@ const EmptyTask = {
   id: `new`,
   description: ``,
   dueDate: null,
-  repeatingDays: days.reduce((acc, it) => {
-    acc[it] = false;
-    return acc;
-  }, {}),
+  repeatingDays: getNoRepeatingDays(days),
   tags: [],
   color: Color.BLACK,
   isFavorite: false,

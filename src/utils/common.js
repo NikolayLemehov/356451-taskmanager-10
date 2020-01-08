@@ -17,4 +17,11 @@ const getIsOverdueDate = (dueDate, date) => {
   return dueDate < date && !getIsOneDay(date, dueDate);
 };
 
-export {formatTime, formatDate, getIsOneDay, getIsOverdueDate};
+const getNoRepeatingDays = (days) => {
+  return days.reduce((acc, it) => {
+    acc[it] = false;
+    return acc;
+  }, {});
+};
+
+export {formatTime, formatDate, getIsOneDay, getIsOverdueDate, getNoRepeatingDays};

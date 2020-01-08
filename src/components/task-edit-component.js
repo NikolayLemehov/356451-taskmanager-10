@@ -1,6 +1,6 @@
 import flatpickr from 'flatpickr';
 import {colors, days} from '../const.js';
-import {formatTime, formatDate} from '../utils/common';
+import {formatTime, formatDate, getNoRepeatingDays} from '../utils/common';
 import AbstractSmartComponent from "./abstract-smart-component";
 
 const DescriptionLength = {
@@ -196,10 +196,6 @@ const createTaskEditTemplate = (task, options = {}) => {
 };
 
 const parseFormData = (formData) => {
-  const repeatingDays = days.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
   const date = formData.get(`date`);
 
   return {
@@ -210,7 +206,7 @@ const parseFormData = (formData) => {
     repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
       acc[it] = true;
       return acc;
-    }, repeatingDays),
+    }, getNoRepeatingDays(days)),
   };
 };
 
