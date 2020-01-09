@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component";
 
-export const MenuItem = {
+const MenuItem = {
   NEW_TASK: `control__new-task`,
   STATISTICS: `control__statistic`,
   TASKS: `control__task`,
@@ -39,9 +39,17 @@ const createSiteMenuTemplate = () => {
   );
 };
 
-export default class SiteMenuComponent extends AbstractComponent {
+class SiteMenuComponent extends AbstractComponent {
   getTemplate() {
     return createSiteMenuTemplate();
+  }
+
+  setActiveItem(menuItem) {
+    const item = this.getElement().querySelector(`#${menuItem}`);
+
+    if (item) {
+      item.checked = true;
+    }
   }
 
   setOnChange(handler) {
@@ -55,3 +63,5 @@ export default class SiteMenuComponent extends AbstractComponent {
     });
   }
 }
+
+export {SiteMenuComponent as default, MenuItem};

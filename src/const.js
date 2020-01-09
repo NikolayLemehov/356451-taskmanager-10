@@ -54,4 +54,4 @@ const FilterType = {
   TODAY: `today`,
 };
 
-export {colors, days, EmptyTask, monthNames, SortType, FilterType};
+export {Color, colors, days, EmptyTask, monthNames, SortType, FilterType};
