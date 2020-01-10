@@ -7,6 +7,7 @@ import {renderElement} from "./utils/renderElement";
 import {MenuItem} from "./const";
 import BoardController from "./controllers/board-controller";
 import FilterController from "./controllers/filter-controller";
+import 'flatpickr/dist/flatpickr.css';
 
 const TASK_COUNT = 41;
 

@@ -1,3 +1,4 @@
+import he from "he";
 import {monthNames} from "../const";
 import {formatTime} from "../utils/common";
 import AbstractComponent from "./abstract-component";
@@ -54,7 +55,7 @@ const createTaskTemplate = (task) => {
           </div>
 
           <div class="card__textarea-wrap">
-            <p class="card__text">${id}. ${window.he.encode(notSanitizedDescription)}</p>
+            <p class="card__text">${id}. ${he.encode(notSanitizedDescription)}</p>
           </div>
 
           <div class="card__settings">

@@ -1,4 +1,6 @@
 import {getIsOneDay} from "./common";
+import Chart from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 import {Color} from "../const";
 
@@ -35,8 +37,8 @@ const renderColorsChart = (colorsCtx, tasks) => {
     .map((task) => task.color)
     .filter((it, i, arr) => arr.indexOf(it) === i);
 
-  return new window.Chart(colorsCtx, {
-    plugins: [window.ChartDataLabels],
+  return new Chart(colorsCtx, {
+    plugins: [ChartDataLabels],
     type: `pie`,
     data: {
       labels: colors,
@@ -97,8 +99,8 @@ const renderDaysChart = (daysCtx, tasks, dateFrom, dateTo) => {
 
   const formattedDates = days.map((it) => moment(it).format(`DD MMM`));
 
-  return new window.Chart(daysCtx, {
-    plugins: [window.ChartDataLabels],
+  return new Chart(daysCtx, {
+    plugins: [ChartDataLabels],
     type: `line`,
     data: {
       labels: formattedDates,
@@ -166,8 +168,8 @@ const renderTagsChart = (tagsCtx, tasks) => {
     }, [])
     .filter((it, i, arr) => arr.indexOf(it) === i);
 
-  return new window.Chart(tagsCtx, {
-    plugins: [window.ChartDataLabels],
+  return new Chart(tagsCtx, {
+    plugins: [ChartDataLabels],
     type: `pie`,
     data: {
       labels: tagsLabels,

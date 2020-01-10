@@ -1,3 +1,4 @@
+import he from "he";
 import flatpickr from 'flatpickr';
 import {colors, days} from '../const.js';
 import {formatTime, formatDate, getNoRepeatingDays} from '../utils/common';
@@ -141,7 +142,7 @@ const createTaskEditTemplate = (task, options = {}) => {
                 class="card__text"
                 placeholder="Start typing your text here..."
                 name="text"
-              >${window.he.encode(notSanitizedDescription)}</textarea>
+              >${he.encode(notSanitizedDescription)}</textarea>
             </label>
           </div>
 
