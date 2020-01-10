@@ -106,11 +106,7 @@ const renderColorsChart = (colorsCtx, tasks) => {
 const renderDaysChart = (daysCtx, tasks, dateFrom, dateTo) => {
   const days = calculateBetweenDates(dateFrom, dateTo);
 
-  const taskCountOnDay = days.map((date) => {
-    return tasks.filter((task) => {
-      return getIsOneDay(task.dueDate, date);
-    }).length;
-  });
+  const taskCountOnDay = days.map((date) => tasks.filter((task) => getIsOneDay(task.dueDate, date)).length);
 
   const formattedDates = days.map((it) => moment(it).format(`DD MMM`));
 
