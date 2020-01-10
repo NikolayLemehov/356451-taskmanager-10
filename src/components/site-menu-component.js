@@ -1,11 +1,5 @@
 import AbstractComponent from "./abstract-component";
 
-const MenuItem = {
-  NEW_TASK: `control__new-task`,
-  STATISTICS: `control__statistic`,
-  TASKS: `control__task`,
-};
-
 const createSiteMenuTemplate = () => {
   return (
     `<section class="control__btn-wrap">
@@ -39,7 +33,7 @@ const createSiteMenuTemplate = () => {
   );
 };
 
-class SiteMenuComponent extends AbstractComponent {
+export default class SiteMenuComponent extends AbstractComponent {
   getTemplate() {
     return createSiteMenuTemplate();
   }
@@ -63,5 +57,3 @@ class SiteMenuComponent extends AbstractComponent {
     });
   }
 }
-
-export {SiteMenuComponent as default, MenuItem};

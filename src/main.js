@@ -1,9 +1,10 @@
-import SiteMenuComponent, {MenuItem} from "./components/site-menu-component";
+import SiteMenuComponent from "./components/site-menu-component";
 import BoardComponent from "./components/board-component";
 import StatisticsComponent from "./components/statistics-component";
 import TasksModel from './models/tasks-model';
 import {generateTasks} from "./mock/task";
 import {renderElement} from "./utils/render";
+import {MenuItem} from "./const";
 import BoardController from "./controllers/board-controller";
 import FilterController from "./controllers/filter-controller";
 

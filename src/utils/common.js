@@ -24,4 +24,6 @@ const getNoRepeatingDays = (days) => {
   }, {});
 };
 
-export {formatTime, formatDate, getIsOneDay, getIsOverdueDate, getNoRepeatingDays};
+const getExactDate = (date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+export {formatTime, formatDate, getIsOneDay, getIsOverdueDate, getNoRepeatingDays, getExactDate};

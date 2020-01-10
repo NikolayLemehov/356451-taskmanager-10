@@ -54,4 +54,10 @@ const FilterType = {
   TODAY: `today`,
 };
 
-export {Color, colors, days, EmptyTask, monthNames, SortType, FilterType};
+const MenuItem = {
+  NEW_TASK: `control__new-task`,
+  STATISTICS: `control__statistic`,
+  TASKS: `control__task`,
+};
+
+export {Color, colors, days, EmptyTask, monthNames, SortType, FilterType, MenuItem};
