@@ -8,7 +8,7 @@ import {MenuItem} from "./const";
 import BoardController from "./controllers/board-controller";
 import FilterController from "./controllers/filter-controller";
 
-const TASK_COUNT = 41;
+const TASK_COUNT = 11;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);

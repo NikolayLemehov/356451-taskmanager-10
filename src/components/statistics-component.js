@@ -12,10 +12,6 @@ const ColorValue = {
   [Color.YELLOW]: `#ffe125`,
 };
 
-const getUniqItems = (item, index, array) => {
-  return array.indexOf(item) === index;
-};
-
 const getTasksByDateRange = (tasks, dateFrom, dateTo) => {
   return tasks.filter((task) => task.dueDate >= dateFrom && task.dueDate <= dateTo);
 };
@@ -50,7 +46,7 @@ const calculateBetweenDates = (from, to) => {
 const renderColorsChart = (colorsCtx, tasks) => {
   const colors = tasks
     .map((task) => task.color)
-    .filter(getUniqItems);
+    .filter((it, i, arr) => arr.indexOf(it) === i);
 
   return new window.Chart(colorsCtx, {
     plugins: [window.ChartDataLabels],
@@ -185,7 +181,7 @@ const renderTagsChart = (tagsCtx, tasks) => {
     .reduce((acc, tags) => {
       return acc.concat(Array.from(tags));
     }, [])
-    .filter(getUniqItems);
+    .filter((it, i, arr) => arr.indexOf(it) === i);
 
   return new window.Chart(tagsCtx, {
     plugins: [window.ChartDataLabels],
