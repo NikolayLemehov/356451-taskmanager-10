@@ -12,7 +12,7 @@ const ColorValue = {
   [Color.YELLOW]: `#ffe125`,
 };
 
-const getTasksByDateRange = (tasks, dateFrom, dateTo) => {
+const filterTasksByDateRange = (tasks, dateFrom, dateTo) => {
   return tasks.filter((task) => task.dueDate >= dateFrom && task.dueDate <= dateTo);
 };
 
@@ -247,7 +247,7 @@ const renderTagsChart = (tagsCtx, tasks) => {
 
 const createStatisticsTemplate = ({tasks, dateFrom, dateTo}) => {
   const placeholder = createPlaceholder(dateFrom, dateTo);
-  const tasksCount = getTasksByDateRange(tasks, dateFrom, dateTo).length;
+  const tasksCount = filterTasksByDateRange(tasks, dateFrom, dateTo).length;
   return (
     `<section class="statistic container">
       <div class="statistic__line">
