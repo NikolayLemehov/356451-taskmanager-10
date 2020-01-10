@@ -3,7 +3,7 @@ import SortingComponent from "../components/sorting-component";
 import TaskListComponent from "../components/task-list-component";
 import LoadMoreButtonComponent from "../components/load-more-button-component";
 import TaskController, {Mode} from "./task-controller";
-import {removeElement, renderElement} from "../utils/render";
+import {removeElement, renderElement} from "../utils/renderElement";
 import {SortType, EmptyTask} from "../const";
 
 const SHOWING_TASKS_PER_PAGE = 8;

@@ -1,4 +1,4 @@
-import {RenderPosition, removeElement, renderElement, replaceElement} from "../utils/render";
+import {RenderPosition, removeElement, renderElement, replaceElement} from "../utils/renderElement";
 import {EmptyTask} from "../const";
 import TaskComponent from "../components/task-component";
 import TaskEditComponent from "../components/task-edit-component";

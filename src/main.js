@@ -3,12 +3,12 @@ import BoardComponent from "./components/board-component";
 import StatisticsComponent from "./components/statistics-component";
 import TasksModel from './models/tasks-model';
 import {generateTasks} from "./mock/task";
-import {renderElement} from "./utils/render";
+import {renderElement} from "./utils/renderElement";
 import {MenuItem} from "./const";
 import BoardController from "./controllers/board-controller";
 import FilterController from "./controllers/filter-controller";
 
-const TASK_COUNT = 11;
+const TASK_COUNT = 41;
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
