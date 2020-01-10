@@ -1,6 +1,6 @@
 import moment from "moment";
 import flatpickr from "flatpickr";
-import AbstractSmartComponent from './abstract-smart-component.js';
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import {renderColorsChart, renderDaysChart, renderTagsChart} from "../utils/renderChart";
 
 const filterTasksByDateRange = (tasks, dateFrom, dateTo) => {
