@@ -1,3 +1,5 @@
+import {getNoRepeatingDays} from "./utils/common";
+
 const Color = {
   BLACK: `black`,
   YELLOW: `yellow`,
@@ -14,10 +16,7 @@ const EmptyTask = {
   id: `new`,
   description: ``,
   dueDate: null,
-  repeatingDays: days.reduce((acc, it) => {
-    acc[it] = false;
-    return acc;
-  }, {}),
+  repeatingDays: getNoRepeatingDays(days),
   tags: [],
   color: Color.BLACK,
   isFavorite: false,
@@ -55,4 +54,10 @@ const FilterType = {
   TODAY: `today`,
 };
 
-export {colors, days, EmptyTask, monthNames, SortType, FilterType};
+const MenuItem = {
+  NEW_TASK: `control__new-task`,
+  STATISTICS: `control__statistic`,
+  TASKS: `control__task`,
+};
+
+export {Color, colors, days, EmptyTask, monthNames, SortType, FilterType, MenuItem};

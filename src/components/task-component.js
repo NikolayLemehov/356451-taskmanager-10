@@ -1,3 +1,4 @@
+import he from "he";
 import {monthNames} from "../const";
 import {formatTime} from "../utils/common";
 import AbstractComponent from "./abstract-component";
@@ -18,7 +19,7 @@ const createHashtagsMarkup = (hashtags) => {
 };
 
 const createTaskTemplate = (task) => {
-  const {id, description, dueDate, repeatingDays, tags, color, isArchive, isFavorite} = task;
+  const {id, description: notSanitizedDescription, dueDate, repeatingDays, tags, color, isArchive, isFavorite} = task;
 
   const isDateShowing = !!dueDate;
   const date = isDateShowing ? `${dueDate.getDate()} ${monthNames[dueDate.getMonth()]}` : ``;
@@ -54,7 +55,7 @@ const createTaskTemplate = (task) => {
           </div>
 
           <div class="card__textarea-wrap">
-            <p class="card__text">${id}. ${description}</p>
+            <p class="card__text">${id}. ${he.encode(notSanitizedDescription)}</p>
           </div>
 
           <div class="card__settings">

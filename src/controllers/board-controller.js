@@ -2,15 +2,15 @@ import EmptyComponent from "../components/empty-component";
 import SortingComponent from "../components/sorting-component";
 import TaskListComponent from "../components/task-list-component";
 import LoadMoreButtonComponent from "../components/load-more-button-component";
-import SiteMenuComponent from "../components/site-menu-component";
 import TaskController, {Mode} from "./task-controller";
-import {removeElement, renderElement} from "../utils/render";
+import {removeElement, renderElement} from "../utils/renderElement";
 import {SortType, EmptyTask} from "../const";
 
 const SHOWING_TASKS_PER_PAGE = 8;
 
 export default class BoardController {
   constructor(containerComponent, tasksModel) {
+    this._containerComponent = containerComponent;
     this._container = containerComponent.getElement();
     this._tasksModel = tasksModel;
 
@@ -22,7 +22,6 @@ export default class BoardController {
     this._taskListComponent = new TaskListComponent();
     this._taskListElement = this._taskListComponent.getElement();
     this._loadMoreButtonComponent = new LoadMoreButtonComponent();
-    this._siteMenuComponent = new SiteMenuComponent();
 
     this._showingTasksCount = SHOWING_TASKS_PER_PAGE;
 
@@ -51,6 +50,14 @@ export default class BoardController {
 
     this._renderTasks(tasks.slice(0, this._showingTasksCount));
     this._renderLoadMoreButton();
+  }
+
+  hide() {
+    this._containerComponent.hide();
+  }
+
+  show() {
+    this._containerComponent.show();
   }
 
   createTask() {

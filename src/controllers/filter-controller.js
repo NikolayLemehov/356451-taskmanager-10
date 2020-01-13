@@ -1,5 +1,5 @@
 import FilterComponent from '../components/filter-component';
-import {renderElement, replaceElement} from '../utils/render';
+import {renderElement, replaceElement} from '../utils/renderElement';
 
 export default class FilterController {
   constructor(container, tasksModel) {

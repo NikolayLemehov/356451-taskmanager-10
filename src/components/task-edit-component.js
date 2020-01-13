@@ -1,6 +1,7 @@
+import he from "he";
 import flatpickr from 'flatpickr';
 import {colors, days} from '../const.js';
-import {formatTime, formatDate} from '../utils/common';
+import {formatTime, formatDate, getNoRepeatingDays} from '../utils/common';
 import AbstractSmartComponent from "./abstract-smart-component";
 
 const DescriptionLength = {
@@ -87,12 +88,12 @@ const createHashtags = (tags) => {
 
 const createTaskEditTemplate = (task, options = {}) => {
   const {tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, repeatingDays, description} = options;
+  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = options;
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
   (isRepeatingTask && !Object.values(repeatingDays).some((it) => it === true) ||
-    !getIsAllowableDescriptionLength(description)) ? `disabled style='${RED_COLOR_STYLE_PROPERTY}'` : ``;
+    !getIsAllowableDescriptionLength(notSanitizedDescription)) ? `disabled style='${RED_COLOR_STYLE_PROPERTY}'` : ``;
 
   const date = isDateShowing && !!dueDate ? formatDate(dueDate) : ``;
   const time = isDateShowing && !!dueDate ? formatTime(dueDate) : ``;
@@ -141,7 +142,7 @@ const createTaskEditTemplate = (task, options = {}) => {
                 class="card__text"
                 placeholder="Start typing your text here..."
                 name="text"
-              >${description}</textarea>
+              >${he.encode(notSanitizedDescription)}</textarea>
             </label>
           </div>
 
@@ -196,10 +197,6 @@ const createTaskEditTemplate = (task, options = {}) => {
 };
 
 const parseFormData = (formData) => {
-  const repeatingDays = days.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
   const date = formData.get(`date`);
 
   return {
@@ -210,7 +207,7 @@ const parseFormData = (formData) => {
     repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
       acc[it] = true;
       return acc;
-    }, repeatingDays),
+    }, getNoRepeatingDays(days)),
   };
 };
 
