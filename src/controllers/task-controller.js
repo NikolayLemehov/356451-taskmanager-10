@@ -56,7 +56,6 @@ export default class TaskController {
       const formData = this._taskEditComponent.getData();
       const newTaskAdapterModel = this._parseFormData(formData, taskAdapterModel);
       this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
-      // this._replaceEditToTask();
     });
     this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, taskAdapterModel, null));
 
