@@ -139,6 +139,7 @@ export default class BoardController {
           const isSuccess = this._tasksModel.updateTask(oldTask.id, taskAdapterModel);
           if (isSuccess) {
             taskController.render(taskAdapterModel, Mode.DEFAULT);
+            this._updateTasks(this._showingTasksCount);
           }
         });
     }
