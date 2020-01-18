@@ -27,6 +27,17 @@ export default class API {
       .then(TaskAdapterModel.parseTasks);
   }
 
+  createTask(taskAdapterModel) {
+    return this._load({
+      url: `tasks`,
+      method: Method.POST,
+      body: JSON.stringify(taskAdapterModel.getRAW()),
+      headers: new Headers({'Content-Type': `application/json`})
+    })
+      .then((response) => response.json())
+      .then(TaskAdapterModel.parseTask);
+  }
+
   updateTask(id, taskAdapterModel) {
     return this._load({
       url: `tasks/${id}`,
