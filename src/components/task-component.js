@@ -86,6 +86,9 @@ export default class TaskComponent extends AbstractComponent {
   constructor(task) {
     super();
     this._task = task;
+    this._cardInnerElement = this.getElement().querySelector(`.card__inner`);
+    this._archiveBtnElement = this.getElement().querySelector(`.card__btn--archive`);
+    this._favoritesBtnElement = this.getElement().querySelector(`.card__btn--favorites`);
   }
 
   getTemplate() {
@@ -98,12 +101,34 @@ export default class TaskComponent extends AbstractComponent {
   }
 
   setArchiveButtonClickHandler(handler) {
-    this.getElement().querySelector(`.card__btn--archive`)
-      .addEventListener(`click`, handler);
+    this._archiveBtnElement.addEventListener(`click`, handler);
   }
 
   setFavoritesButtonClickHandler(handler) {
-    this.getElement().querySelector(`.card__btn--favorites`)
-      .addEventListener(`click`, handler);
+    this._favoritesBtnElement.addEventListener(`click`, handler);
+  }
+
+  disableArchiveBtn() {
+    this._archiveBtnElement.disabled = `disabled`;
+  }
+
+  activeArchiveBtn() {
+    this._archiveBtnElement.disabled = ``;
+  }
+
+  disableFavoritesBtn() {
+    this._favoritesBtnElement.disabled = `disabled`;
+  }
+
+  activeFavoritesBtn() {
+    this._favoritesBtnElement.disabled = ``;
+  }
+
+  activateWarningFrame() {
+    this._cardInnerElement.style.outline = `10px solid red`;
+  }
+
+  deactivateWarningFrame() {
+    this._cardInnerElement.style.outline = ``;
   }
 }

@@ -5,6 +5,8 @@ import TaskEditComponent from "../components/task-edit-component";
 import TaskAdapterModel from "../models/task-adapter-model";
 import {getNoRepeatingDays} from "../utils/common";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
@@ -40,12 +42,14 @@ export default class TaskController {
     });
 
     this._taskComponent.setArchiveButtonClickHandler(() => {
+      this._taskComponent.disableArchiveBtn();
       const newTaskAdapterModel = TaskAdapterModel.clone(taskAdapterModel);
       newTaskAdapterModel.isArchive = !newTaskAdapterModel.isArchive;
       this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
     });
 
     this._taskComponent.setFavoritesButtonClickHandler(() => {
+      this._taskComponent.disableFavoritesBtn();
       const newTaskAdapterModel = TaskAdapterModel.clone(taskAdapterModel);
       newTaskAdapterModel.isFavorite = !newTaskAdapterModel.isFavorite;
       this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
@@ -93,6 +97,29 @@ export default class TaskController {
     removeElement(this._taskEditComponent);
     removeElement(this._taskComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  shake() {
+    const removeAnimation = () => {
+      this._taskEditComponent.getElement().classList.remove(`shake`);
+      this._taskComponent.getElement().classList.remove(`shake`);
+      this._taskEditComponent.deactivateWarningFrame();
+      this._taskComponent.deactivateWarningFrame();
+    };
+    const animate = () => {
+      this._taskEditComponent.activeSave();
+      this._taskEditComponent.activeDelete();
+      this._taskComponent.activeArchiveBtn();
+      this._taskComponent.activeFavoritesBtn();
+
+      this._taskEditComponent.activateWarningFrame();
+      this._taskComponent.activateWarningFrame();
+
+      this._taskEditComponent.getElement().classList.add(`shake`);
+      this._taskComponent.getElement().classList.add(`shake`);
+      setTimeout(removeAnimation, SHAKE_ANIMATION_TIMEOUT);
+    };
+    setTimeout(animate, SHAKE_ANIMATION_TIMEOUT);
   }
 
   _parseFormData(formData, taskAdapterModel) {

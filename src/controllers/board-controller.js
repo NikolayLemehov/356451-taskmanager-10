@@ -131,6 +131,9 @@ export default class BoardController {
 
             this._showedTaskControllers = [].concat(taskController, this._showedTaskControllers);
             this._showingTasksCount = this._showedTaskControllers.length;
+          })
+          .catch(() => {
+            taskController.shake();
           });
       }
     } else if (newTaskAdapterModel === null) {
@@ -138,6 +141,9 @@ export default class BoardController {
         .then(() => {
           this._tasksModel.removeTask(oldTask.id);
           this._updateTasks(this._showingTasksCount);
+        })
+        .catch(() => {
+          taskController.shake();
         });
     } else {
       this._api.updateTask(oldTask.id, newTaskAdapterModel)
@@ -147,6 +153,9 @@ export default class BoardController {
             taskController.render(taskAdapterModel, Mode.DEFAULT);
             this._updateTasks(this._showingTasksCount);
           }
+        })
+        .catch(() => {
+          taskController.shake();
         });
     }
   }

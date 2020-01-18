@@ -88,7 +88,7 @@ const createHashtags = (tags) => {
 
 const createTaskEditTemplate = (task, options = {}) => {
   const {tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription, isSubmitting, idDeleting} = options;
+  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = options;
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
@@ -187,13 +187,8 @@ const createTaskEditTemplate = (task, options = {}) => {
           </div>
 
           <div class="card__status-btns">
-            <button class="card__save" type="submit"
-              ${blockedSaveButtonAttribute}
-              ${isSubmitting ? `disabled` : ``}
-              >${isSubmitting ? `saving...` : `save`}</button>
-            <button class="card__delete" type="button"
-              ${idDeleting ? `disabled` : ``}
-              >${idDeleting ? `deleting...` : `delete`}</button>
+            <button class="card__save" type="submit" ${blockedSaveButtonAttribute}>save</button>
+            <button class="card__delete" type="button" >delete</button>
           </div>
         </div>
       </form>
@@ -212,8 +207,9 @@ export default class TaskEditComponent extends AbstractSmartComponent {
     this._flatpickr = null;
     this._submitHandler = null;
     this._deleteButtonClickHandler = null;
-    this._isSubmitting = false;
-    this._idDeleting = false;
+    this._saveBtnElement = this.getElement().querySelector(`.card__save`);
+    this._deleteBtnElement = this.getElement().querySelector(`.card__delete`);
+    this._cardInnerElement = this.getElement().querySelector(`.card__inner`);
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -225,8 +221,6 @@ export default class TaskEditComponent extends AbstractSmartComponent {
       isRepeatingTask: this._isRepeatingTask,
       repeatingDays: this._repeatingDays,
       description: this._description,
-      isSubmitting: this._isSubmitting,
-      idDeleting: this._idDeleting,
     });
   }
 
@@ -272,13 +266,31 @@ export default class TaskEditComponent extends AbstractSmartComponent {
   }
 
   disableSave() {
-    this._isSubmitting = true;
-    this.rerender();
+    this._saveBtnElement.disabled = `disabled`;
+    this._saveBtnElement.textContent = `saving...`;
+  }
+
+  activeSave() {
+    this._saveBtnElement.disabled = ``;
+    this._saveBtnElement.textContent = `save`;
   }
 
   disableDelete() {
-    this._idDeleting = true;
-    this.rerender();
+    this._deleteBtnElement.disabled = `disabled`;
+    this._deleteBtnElement.textContent = `deleting...`;
+  }
+
+  activeDelete() {
+    this._deleteBtnElement.disabled = ``;
+    this._deleteBtnElement.textContent = `delete`;
+  }
+
+  activateWarningFrame() {
+    this._cardInnerElement.style.outline = `10px solid red`;
+  }
+
+  deactivateWarningFrame() {
+    this._cardInnerElement.style.outline = ``;
   }
 
   _applyFlatpickr() {
