@@ -131,8 +131,11 @@ export default class BoardController {
         this._showingTasksCount = this._showedTaskControllers.length;
       }
     } else if (newTaskAdapterModel === null) {
-      this._tasksModel.removeTask(oldTask.id);
-      this._updateTasks(this._showingTasksCount);
+      this._api.deleteTask(oldTask.id)
+        .then(() => {
+          this._tasksModel.removeTask(oldTask.id);
+          this._updateTasks(this._showingTasksCount);
+        });
     } else {
       this._api.updateTask(oldTask.id, newTaskAdapterModel)
         .then((taskAdapterModel) => {

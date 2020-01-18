@@ -38,6 +38,10 @@ export default class API {
       .then(TaskAdapterModel.parseTask);
   }
 
+  deleteTask(id) {
+    return this._load({url: `tasks/${id}`, method: Method.DELETE});
+  }
+
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
     headers.append(`Authorization`, this._authorization);
 
