@@ -54,10 +54,14 @@ export default class TaskController {
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
       const formData = this._taskEditComponent.getData();
+      this._taskEditComponent.disableSave();
       const newTaskAdapterModel = this._parseFormData(formData, taskAdapterModel);
       this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
     });
-    this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, taskAdapterModel, null));
+    this._taskEditComponent.setDeleteButtonClickHandler(() => {
+      this._taskEditComponent.disableDelete();
+      this._onDataChange(this, taskAdapterModel, null);
+    });
 
     switch (mode) {
       case Mode.DEFAULT:

@@ -88,7 +88,7 @@ const createHashtags = (tags) => {
 
 const createTaskEditTemplate = (task, options = {}) => {
   const {tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = options;
+  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription, isSubmitting, idDeleting} = options;
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
@@ -187,8 +187,13 @@ const createTaskEditTemplate = (task, options = {}) => {
           </div>
 
           <div class="card__status-btns">
-            <button class="card__save" type="submit" ${blockedSaveButtonAttribute}>save</button>
-            <button class="card__delete" type="button">delete</button>
+            <button class="card__save" type="submit"
+              ${blockedSaveButtonAttribute}
+              ${isSubmitting ? `disabled` : ``}
+              >${isSubmitting ? `saving...` : `save`}</button>
+            <button class="card__delete" type="button"
+              ${idDeleting ? `disabled` : ``}
+              >${idDeleting ? `deleting...` : `delete`}</button>
           </div>
         </div>
       </form>
@@ -207,6 +212,8 @@ export default class TaskEditComponent extends AbstractSmartComponent {
     this._flatpickr = null;
     this._submitHandler = null;
     this._deleteButtonClickHandler = null;
+    this._isSubmitting = false;
+    this._idDeleting = false;
 
     this._applyFlatpickr();
     this._subscribeOnEvents();
@@ -218,6 +225,8 @@ export default class TaskEditComponent extends AbstractSmartComponent {
       isRepeatingTask: this._isRepeatingTask,
       repeatingDays: this._repeatingDays,
       description: this._description,
+      isSubmitting: this._isSubmitting,
+      idDeleting: this._idDeleting,
     });
   }
 
@@ -260,6 +269,16 @@ export default class TaskEditComponent extends AbstractSmartComponent {
       .addEventListener(`click`, handler);
 
     this._deleteButtonClickHandler = handler;
+  }
+
+  disableSave() {
+    this._isSubmitting = true;
+    this.rerender();
+  }
+
+  disableDelete() {
+    this._idDeleting = true;
+    this.rerender();
   }
 
   _applyFlatpickr() {
