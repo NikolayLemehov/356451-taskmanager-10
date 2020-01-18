@@ -1,7 +1,9 @@
 import {RenderPosition, removeElement, renderElement, replaceElement} from "../utils/renderElement";
-import {EmptyTask} from "../const";
+import {days, EmptyTask} from "../const";
 import TaskComponent from "../components/task-component";
 import TaskEditComponent from "../components/task-edit-component";
+import TaskAdapterModel from "../models/task-adapter-model";
+import {getNoRepeatingDays} from "../utils/common";
 
 export const Mode = {
   DEFAULT: `default`,
@@ -24,13 +26,13 @@ export default class TaskController {
     this._replaceEditToTask = this._replaceEditToTask.bind(this);
   }
 
-  render(task, mode) {
+  render(taskAdapterModel, mode) {
     const oldTaskComponent = this._taskComponent;
     const oldTaskEditComponent = this._taskEditComponent;
     this._mode = mode;
 
-    this._taskComponent = new TaskComponent(task);
-    this._taskEditComponent = new TaskEditComponent(task);
+    this._taskComponent = new TaskComponent(taskAdapterModel);
+    this._taskEditComponent = new TaskEditComponent(taskAdapterModel);
 
     this._taskComponent.setEditButtonClickHandler(() => {
       this._replaceTaskToEdit();
@@ -38,24 +40,25 @@ export default class TaskController {
     });
 
     this._taskComponent.setArchiveButtonClickHandler(() => {
-      this._onDataChange(this, task, Object.assign({}, task, {
-        isArchive: !task.isArchive,
-      }));
+      const newTaskAdapterModel = TaskAdapterModel.clone(taskAdapterModel);
+      newTaskAdapterModel.isArchive = !newTaskAdapterModel.isArchive;
+      this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
     });
 
     this._taskComponent.setFavoritesButtonClickHandler(() => {
-      this._onDataChange(this, task, Object.assign({}, task, {
-        isFavorite: !task.isFavorite,
-      }));
+      const newTaskAdapterModel = TaskAdapterModel.clone(taskAdapterModel);
+      newTaskAdapterModel.isFavorite = !newTaskAdapterModel.isFavorite;
+      this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
     });
 
     this._taskEditComponent.setSubmitHandler((evt) => {
       evt.preventDefault();
-      const data = this._taskEditComponent.getData();
-      this._onDataChange(this, task, Object.assign({}, task, data));
+      const formData = this._taskEditComponent.getData();
+      const newTaskAdapterModel = this._parseFormData(formData, taskAdapterModel);
+      this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
       this._replaceEditToTask();
     });
-    this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, task, null));
+    this._taskEditComponent.setDeleteButtonClickHandler(() => this._onDataChange(this, taskAdapterModel, null));
 
     switch (mode) {
       case Mode.DEFAULT:
@@ -87,6 +90,24 @@ export default class TaskController {
     removeElement(this._taskEditComponent);
     removeElement(this._taskComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _parseFormData(formData, taskAdapterModel) {
+    const date = formData.get(`date`);
+
+    return new TaskAdapterModel({
+      'description': formData.get(`text`),
+      'color': formData.get(`color`),
+      'tags': formData.getAll(`hashtag`),
+      'due_date': date ? new Date(date) : null,
+      'repeating_days': formData.getAll(`repeat`).reduce((acc, it) => {
+        acc[it] = true;
+        return acc;
+      }, getNoRepeatingDays(days)),
+      'id': taskAdapterModel.id,
+      'is_favorite': taskAdapterModel.isFavorite,
+      'is_archived': taskAdapterModel.isArchive,
+    });
   }
 
   _replaceEditToTask() {

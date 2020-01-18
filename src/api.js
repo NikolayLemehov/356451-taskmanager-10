@@ -1,4 +1,4 @@
-import TasksAdapterModel from "./models/tasks-adapter-model";
+import TaskAdapterModel from "./models/task-adapter-model";
 
 const Method = {
   GET: `GET`,
@@ -24,7 +24,18 @@ export default class API {
   getTasks() {
     return this._load({url: `tasks`})
       .then((response) => response.json())
-      .then(TasksAdapterModel.parseTasks);
+      .then(TaskAdapterModel.parseTasks);
+  }
+
+  updateTask(id, taskAdapterModel) {
+    return this._load({
+      url: `tasks/${id}`,
+      method: Method.PUT,
+      body: JSON.stringify(taskAdapterModel.getRAW()),
+      headers: new Headers({'Content-Type': `application/json`})
+    })
+      .then((response) => response.json())
+      .then(TaskAdapterModel.parseTask);
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

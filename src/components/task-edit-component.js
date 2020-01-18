@@ -1,7 +1,7 @@
 import he from "he";
 import flatpickr from 'flatpickr';
 import {colors, days} from '../const.js';
-import {formatTime, formatDate, getNoRepeatingDays} from '../utils/common';
+import {formatTime, formatDate} from '../utils/common';
 import AbstractSmartComponent from "./abstract-smart-component";
 
 const DescriptionLength = {
@@ -152,13 +152,13 @@ const createTaskEditTemplate = (task, options = {}) => {
                 <button class="card__date-deadline-toggle" type="button">
                   date: <span class="card__date-status">${isDateShowing ? `yes` : `no`}</span>
                 </button>
-                  
+
                 ${isDateShowing ? dateElement : ``}
 
                 <button class="card__repeat-toggle" type="button">
                   repeat:<span class="card__repeat-status">${isRepeatingTask ? `yes` : `no`}</span>
                 </button>
-                
+
                 ${isRepeatingTask ? repeatingDaysElement : ``}
               </div>
 
@@ -194,21 +194,6 @@ const createTaskEditTemplate = (task, options = {}) => {
       </form>
     </article>`
   );
-};
-
-const parseFormData = (formData) => {
-  const date = formData.get(`date`);
-
-  return {
-    description: formData.get(`text`),
-    color: formData.get(`color`),
-    tags: formData.getAll(`hashtag`),
-    dueDate: date ? new Date(date) : null,
-    repeatingDays: formData.getAll(`repeat`).reduce((acc, it) => {
-      acc[it] = true;
-      return acc;
-    }, getNoRepeatingDays(days)),
-  };
 };
 
 export default class TaskEditComponent extends AbstractSmartComponent {
@@ -261,9 +246,7 @@ export default class TaskEditComponent extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    const formData = new FormData(form);
-
-    return parseFormData(formData);
+    return new FormData(form);
   }
 
   setSubmitHandler(handler) {

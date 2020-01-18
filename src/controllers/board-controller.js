@@ -9,10 +9,11 @@ import {SortType, EmptyTask} from "../const";
 const SHOWING_TASKS_PER_PAGE = 8;
 
 export default class BoardController {
-  constructor(containerComponent, tasksModel) {
+  constructor(containerComponent, tasksModel, api) {
     this._containerComponent = containerComponent;
     this._container = containerComponent.getElement();
     this._tasksModel = tasksModel;
+    this._api = api;
 
     this._sortedTasks = [];
     this._showedTaskControllers = [];
@@ -69,10 +70,10 @@ export default class BoardController {
     this._creatingTaskController.render(EmptyTask, Mode.ADDING);
   }
 
-  _renderTasks(tasks) {
-    const newTaskControllers = tasks.map((task) => {
+  _renderTasks(taskAdapterModels) {
+    const newTaskControllers = taskAdapterModels.map((taskAdapterModel) => {
       const taskController = new TaskController(this._taskListElement, this._onDataChange, this._onViewChange);
-      taskController.render(task, Mode.DEFAULT);
+      taskController.render(taskAdapterModel, Mode.DEFAULT);
 
       return taskController;
     });
@@ -113,15 +114,15 @@ export default class BoardController {
     }
   }
 
-  _onDataChange(taskController, oldTask, newTask) {
+  _onDataChange(taskController, oldTask, newTaskAdapterModel) {
     if (oldTask === EmptyTask) {
       this._creatingTaskController = null;
-      if (newTask === null) {
+      if (newTaskAdapterModel === null) {
         taskController.destroy();
         this._updateTasks(this._showingTasksCount);
       } else {
-        this._tasksModel.addTask(newTask);
-        taskController.render(newTask, Mode.DEFAULT);
+        this._tasksModel.addTask(newTaskAdapterModel);
+        taskController.render(newTaskAdapterModel, Mode.DEFAULT);
 
         const destroyedTask = this._showedTaskControllers.pop();
         destroyedTask.destroy();
@@ -129,15 +130,17 @@ export default class BoardController {
         this._showedTaskControllers = [].concat(taskController, this._showedTaskControllers);
         this._showingTasksCount = this._showedTaskControllers.length;
       }
-    } else if (newTask === null) {
+    } else if (newTaskAdapterModel === null) {
       this._tasksModel.removeTask(oldTask.id);
       this._updateTasks(this._showingTasksCount);
     } else {
-      const isSuccess = this._tasksModel.updateTask(oldTask.id, newTask);
-
-      if (isSuccess) {
-        taskController.render(newTask, Mode.DEFAULT);
-      }
+      this._api.updateTask(oldTask.id, newTaskAdapterModel)
+        .then((taskAdapterModel) => {
+          const isSuccess = this._tasksModel.updateTask(oldTask.id, taskAdapterModel);
+          if (isSuccess) {
+            taskController.render(taskAdapterModel, Mode.DEFAULT);
+          }
+        });
     }
   }
 
