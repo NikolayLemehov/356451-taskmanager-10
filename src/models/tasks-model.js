@@ -3,7 +3,7 @@ import {getTasksByFilter} from "../utils/filter";
 
 export default class TasksModel {
   constructor() {
-    this._tasks = [];
+    this._taskAdapterModels = [];
     this._activeFilterType = FilterType.ALL;
 
     this._dataChangeHandlers = [];
@@ -11,15 +11,15 @@ export default class TasksModel {
   }
 
   getTasks() {
-    return getTasksByFilter(this._tasks, this._activeFilterType);
+    return getTasksByFilter(this._taskAdapterModels, this._activeFilterType);
   }
 
   getTasksAll() {
-    return this._tasks;
+    return this._taskAdapterModels;
   }
 
-  setTasks(tasks) {
-    this._tasks = Array.from(tasks);
+  setTasks(taskAdapterModels) {
+    this._taskAdapterModels = Array.from(taskAdapterModels);
   }
 
   setFilter(filterType) {
@@ -37,14 +37,14 @@ export default class TasksModel {
     });
   }
 
-  updateTask(id, task) {
-    const index = this._tasks.findIndex((it) => it.id === id);
+  updateTask(id, taskAdapterModel) {
+    const index = this._taskAdapterModels.findIndex((it) => it.id === id);
 
     if (index === -1) {
       return false;
     }
 
-    this._tasks = [].concat(this._tasks.slice(0, index), task, this._tasks.slice(index + 1));
+    this._taskAdapterModels = [].concat(this._taskAdapterModels.slice(0, index), taskAdapterModel, this._taskAdapterModels.slice(index + 1));
 
     this._callHandlers(this._dataChangeHandlers);
 
@@ -56,7 +56,7 @@ export default class TasksModel {
   }
 
   addTask(task) {
-    this._tasks = [].concat(task, this._tasks);
+    this._taskAdapterModels = [].concat(task, this._taskAdapterModels);
     this._callHandlers(this._dataChangeHandlers);
   }
 
