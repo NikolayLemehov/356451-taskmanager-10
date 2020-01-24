@@ -1,7 +1,7 @@
 import he from "he";
-import flatpickr from 'flatpickr';
-import {colors, days} from '../const.js';
-import {formatTime, formatDate} from '../utils/common';
+import flatpickr from "flatpickr";
+import {colors, days} from "../const.js";
+import {formatTime, formatDate} from "../utils/common";
 import AbstractSmartComponent from "./abstract-smart-component";
 
 const DescriptionLength = {
@@ -86,9 +86,9 @@ const createHashtags = (tags) => {
     .join(``);
 };
 
-const createTaskEditTemplate = (task, options = {}) => {
+const createTaskEditTemplate = (task, option = {}) => {
   const {tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = options;
+  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = option;
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||

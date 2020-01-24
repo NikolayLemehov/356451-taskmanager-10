@@ -41,14 +41,20 @@ export default class TaskController {
       document.addEventListener(`keydown`, this._onEscKeyDown);
     });
 
-    this._taskComponent.setArchiveButtonClickHandler(() => {
+    this._taskComponent.setArchiveButtonClickHandler((isChangeArchive) => {
+      if (!isChangeArchive) {
+        return;
+      }
       this._taskComponent.disableArchiveBtn();
       const newTaskAdapterModel = TaskAdapterModel.clone(taskAdapterModel);
       newTaskAdapterModel.isArchive = !newTaskAdapterModel.isArchive;
       this._onDataChange(this, taskAdapterModel, newTaskAdapterModel);
     });
 
-    this._taskComponent.setFavoritesButtonClickHandler(() => {
+    this._taskComponent.setFavoritesButtonClickHandler((isChangeFavorite) => {
+      if (!isChangeFavorite) {
+        return;
+      }
       this._taskComponent.disableFavoritesBtn();
       const newTaskAdapterModel = TaskAdapterModel.clone(taskAdapterModel);
       newTaskAdapterModel.isFavorite = !newTaskAdapterModel.isFavorite;
