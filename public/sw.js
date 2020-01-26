@@ -28,24 +28,14 @@ self.addEventListener(`install`, (evt) => {
 });
 
 self.addEventListener(`activate`, (evt) => {
-  evt.waitUntil(
-    caches.keys()
-      .then(
-        (keys) => Promise.all(
-          keys.map(
-            (key) => {
-              if (key.indexOf(CACHE_PREFIX) === 0 && key !== CACHE_NAME) {
-                return caches.delete(key);
-              }
-
-              return null;
-            }
-          ).filter(
-            (key) => key !== null
-          )
-        )
-      )
-  );
+  evt.waitUntil(caches.keys()
+    .then((keys) => Promise.all(keys
+      .reduce((acc, key) => {
+        if (key.indexOf(CACHE_PREFIX) === 0 && key !== CACHE_NAME) {
+          acc.push(caches.delete(key));
+        }
+        return acc;
+      }, []))));
 });
 
 const onFetch = (evt) => {
