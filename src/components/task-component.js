@@ -1,8 +1,8 @@
-import he from "he";
-import {monthNames} from "../const";
-import {formatTime} from "../utils/common";
-import AbstractComponent from "./abstract-component";
-import {debounce} from "../utils/debounce";
+import he from 'he';
+import {monthNames} from '../const';
+import {formatTime} from '../utils/common';
+import AbstractComponent from './abstract-component';
+import {debounce} from '../utils/debounce';
 
 const DEBOUNCE_DELAY = 1000;
 

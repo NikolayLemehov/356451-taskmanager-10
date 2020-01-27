@@ -1,15 +1,15 @@
-import Api from "./api";
-import Store from "./api/store.js";
-import Provider from "./api/provider.js";
-import SiteMenuComponent from "./components/site-menu-component";
-import BoardComponent from "./components/board-component";
-import StatisticsComponent from "./components/statistics-component";
-import TasksModel from "./models/tasks-model";
-import {renderElement} from "./utils/renderElement";
-import {MenuItem} from "./const";
-import BoardController from "./controllers/board-controller";
-import FilterController from "./controllers/filter-controller";
-import "flatpickr/dist/flatpickr.css";
+import Api from './api';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
+import SiteMenuComponent from './components/site-menu-component';
+import BoardComponent from './components/board-component';
+import StatisticsComponent from './components/statistics-component';
+import TasksModel from './models/tasks-model';
+import {renderElement} from './utils/renderElement';
+import {MenuItem} from './const';
+import BoardController from './controllers/board-controller';
+import FilterController from './controllers/filter-controller';
+import 'flatpickr/dist/flatpickr.css';
 
 const STORE_PREFIX = `taskmanager-localstorage`;
 const STORE_VER = `v1`;

@@ -1,5 +1,5 @@
-import nanoid from "nanoid";
-import TaskAdapterModel from "../models/task-adapter-model";
+import nanoid from 'nanoid';
+import TaskAdapterModel from '../models/task-adapter-model';
 
 const getSyncedTasks =
   (items) => items.filter(({success}) => success).map(({payload}) => payload.task);

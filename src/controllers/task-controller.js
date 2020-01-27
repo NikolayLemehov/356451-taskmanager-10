@@ -1,9 +1,9 @@
-import {RenderPosition, removeElement, renderElement, replaceElement} from "../utils/renderElement";
-import {days, EmptyTask} from "../const";
-import TaskComponent from "../components/task-component";
-import TaskEditComponent from "../components/task-edit-component";
-import TaskAdapterModel from "../models/task-adapter-model";
-import {getNoRepeatingDays} from "../utils/common";
+import {RenderPosition, removeElement, renderElement, replaceElement} from '../utils/renderElement';
+import {days, EmptyTask} from '../const';
+import TaskComponent from '../components/task-component';
+import TaskEditComponent from '../components/task-edit-component';
+import TaskAdapterModel from '../models/task-adapter-model';
+import {getNoRepeatingDays} from '../utils/common';
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 

@@ -1,10 +1,10 @@
-import TaskAdapterModel from "../models/task-adapter-model";
+import TaskAdapterModel from '../models/task-adapter-model';
 
 const Method = {
   GET: `GET`,
   POST: `POST`,
   PUT: `PUT`,
-  DELETE: `DELETE`
+  DELETE: `DELETE`,
 };
 
 const checkStatus = (response) => {
@@ -32,7 +32,7 @@ export default class Index {
       url: `tasks`,
       method: Method.POST,
       body: JSON.stringify(taskAdapterModel.getRAW()),
-      headers: new Headers({'Content-Type': `application/json`})
+      headers: new Headers({'Content-Type': `application/json`}),
     })
       .then((response) => response.json())
       .then(TaskAdapterModel.parseTask);
@@ -43,7 +43,7 @@ export default class Index {
       url: `tasks/${id}`,
       method: Method.PUT,
       body: JSON.stringify(taskAdapterModel.getRAW()),
-      headers: new Headers({'Content-Type': `application/json`})
+      headers: new Headers({'Content-Type': `application/json`}),
     })
       .then((response) => response.json())
       .then(TaskAdapterModel.parseTask);
@@ -58,7 +58,7 @@ export default class Index {
       url: `tasks/sync`,
       method: Method.POST,
       body: JSON.stringify(data),
-      headers: new Headers({'Content-Type': `application/json`})
+      headers: new Headers({'Content-Type': `application/json`}),
     })
       .then((response) => response.json());
   }

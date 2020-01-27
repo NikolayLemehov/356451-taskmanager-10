@@ -1,8 +1,8 @@
-import {getIsOneDay} from "./common";
-import Chart from "chart.js";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-import moment from "moment";
-import {Color} from "../const";
+import {getIsOneDay} from './common';
+import Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import moment from 'moment';
+import {Color} from '../const';
 
 const ColorValue = {
   [Color.BLACK]: `#000000`,
@@ -44,14 +44,14 @@ const renderColorsChart = (colorsCtx, tasks) => {
       labels: colors,
       datasets: [{
         data: colors.map((color) => calcUniqCountColor(tasks, color)),
-        backgroundColor: colors.map((color) => ColorValue[color])
-      }]
+        backgroundColor: colors.map((color) => ColorValue[color]),
+      }],
     },
     options: {
       plugins: {
         datalabels: {
-          display: false
-        }
+          display: false,
+        },
       },
       tooltips: {
         callbacks: {
@@ -61,7 +61,7 @@ const renderColorsChart = (colorsCtx, tasks) => {
             const total = allData.reduce((acc, it) => acc + parseFloat(it));
             const tooltipPercentage = Math.round((tooltipData / total) * 100);
             return `${tooltipData} TASKS — ${tooltipPercentage}%`;
-          }
+          },
         },
         displayColors: false,
         backgroundColor: `#ffffff`,
@@ -70,13 +70,13 @@ const renderColorsChart = (colorsCtx, tasks) => {
         borderWidth: 1,
         cornerRadius: 0,
         xPadding: 15,
-        yPadding: 15
+        yPadding: 15,
       },
       title: {
         display: true,
         text: `DONE BY: COLORS`,
         fontSize: 16,
-        fontColor: `#000000`
+        fontColor: `#000000`,
       },
       legend: {
         position: `left`,
@@ -85,10 +85,10 @@ const renderColorsChart = (colorsCtx, tasks) => {
           padding: 25,
           fontStyle: 500,
           fontColor: `#000000`,
-          fontSize: 13
-        }
-      }
-    }
+          fontSize: 13,
+        },
+      },
+    },
   });
 };
 
@@ -112,52 +112,52 @@ const renderDaysChart = (daysCtx, tasks, dateFrom, dateTo) => {
         lineTension: 0,
         pointRadius: 8,
         pointHoverRadius: 8,
-        pointBackgroundColor: `#000000`
-      }]
+        pointBackgroundColor: `#000000`,
+      }],
     },
     options: {
       plugins: {
         datalabels: {
           font: {
-            size: 8
+            size: 8,
           },
-          color: `#ffffff`
-        }
+          color: `#ffffff`,
+        },
       },
       scales: {
         yAxes: [{
           ticks: {
             beginAtZero: true,
-            display: false
+            display: false,
           },
           gridLines: {
             display: false,
-            drawBorder: false
-          }
+            drawBorder: false,
+          },
         }],
         xAxes: [{
           ticks: {
             fontStyle: `bold`,
-            fontColor: `#000000`
+            fontColor: `#000000`,
           },
           gridLines: {
             display: false,
-            drawBorder: false
-          }
-        }]
+            drawBorder: false,
+          },
+        }],
       },
       legend: {
-        display: false
+        display: false,
       },
       layout: {
         padding: {
-          top: 10
-        }
+          top: 10,
+        },
       },
       tooltips: {
-        enabled: false
-      }
-    }
+        enabled: false,
+      },
+    },
   });
 };
 
@@ -180,14 +180,14 @@ const renderTagsChart = (tagsCtx, tasks) => {
 
           return acc + targetTasksCount;
         }, 0)),
-        backgroundColor: tagsLabels.map(createRandomColor)
-      }]
+        backgroundColor: tagsLabels.map(createRandomColor),
+      }],
     },
     options: {
       plugins: {
         datalabels: {
-          display: false
-        }
+          display: false,
+        },
       },
       tooltips: {
         callbacks: {
@@ -199,7 +199,7 @@ const renderTagsChart = (tagsCtx, tasks) => {
             const tooltipPercentage = Math.round((tooltipData / total) * 100);
 
             return `${tooltipData} TASKS — ${tooltipPercentage}%`;
-          }
+          },
         },
         displayColors: false,
         backgroundColor: `#ffffff`,
@@ -208,13 +208,13 @@ const renderTagsChart = (tagsCtx, tasks) => {
         borderWidth: 1,
         cornerRadius: 0,
         xPadding: 15,
-        yPadding: 15
+        yPadding: 15,
       },
       title: {
         display: true,
         text: `DONE BY: TAGS`,
         fontSize: 16,
-        fontColor: `#000000`
+        fontColor: `#000000`,
       },
       legend: {
         position: `left`,
@@ -223,10 +223,10 @@ const renderTagsChart = (tagsCtx, tasks) => {
           padding: 25,
           fontStyle: 500,
           fontColor: `#000000`,
-          fontSize: 13
-        }
-      }
-    }
+          fontSize: 13,
+        },
+      },
+    },
   });
 };
 
