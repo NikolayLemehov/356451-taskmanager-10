@@ -23,6 +23,6 @@ export default class Store {
 
     delete store[key];
 
-    this._storage.setItem(this._storeKey, JSON.stringify(Object.assign({}, store)));
+    this._storage.setItem(this._storeKey, JSON.stringify(store));
   }
 }
