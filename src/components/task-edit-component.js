@@ -86,9 +86,9 @@ const createHashtags = (tags) => {
     .join(``);
 };
 
-const createTaskEditTemplate = (task, option = {}) => {
+const createTaskEditTemplate = (task, options = {}) => {
   const {tags, dueDate, color} = task;
-  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = option;
+  const {isDateShowing, isRepeatingTask, repeatingDays, description: notSanitizedDescription} = options;
 
   const isExpired = dueDate < Date.now();
   const blockedSaveButtonAttribute = (isDateShowing && isRepeatingTask) ||
