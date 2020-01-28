@@ -1,17 +1,34 @@
-import API from "./api";
-import SiteMenuComponent from "./components/site-menu-component";
-import BoardComponent from "./components/board-component";
-import StatisticsComponent from "./components/statistics-component";
+import Api from './api';
+import Store from './api/store.js';
+import Provider from './api/provider.js';
+import SiteMenuComponent from './components/site-menu-component';
+import BoardComponent from './components/board-component';
+import StatisticsComponent from './components/statistics-component';
 import TasksModel from './models/tasks-model';
-import {renderElement} from "./utils/renderElement";
-import {MenuItem} from "./const";
-import BoardController from "./controllers/board-controller";
-import FilterController from "./controllers/filter-controller";
+import {renderElement} from './utils/renderElement';
+import {MenuItem} from './const';
+import BoardController from './controllers/board-controller';
+import FilterController from './controllers/filter-controller';
 import 'flatpickr/dist/flatpickr.css';
 
+const STORE_PREFIX = `taskmanager-localstorage`;
+const STORE_VER = `v1`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 const AUTHORIZATION = `Basic 6PZAzyuh8iBERIAL536X`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/task-manager`;
-const api = new API(END_POINT, AUTHORIZATION);
+
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      document.title += `[SW]`;
+    })
+    .catch(() => {
+      document.title += `[no SW]`;
+    });
+});
+const api = new Api(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
@@ -35,7 +52,7 @@ const boardComponent = new BoardComponent();
 renderElement(siteMainElement, boardComponent);
 renderElement(siteMainElement, statisticsComponent);
 
-const boardController = new BoardController(boardComponent, tasksModel, api);
+const boardController = new BoardController(boardComponent, tasksModel, apiWithProvider);
 
 statisticsComponent.hide();
 
@@ -58,9 +75,25 @@ siteMenuComponent.setOnChange((menuItem) => {
   }
 });
 
-api.getTasks()
+apiWithProvider.getTasks()
   .then((taskAdapterModels) => {
     tasksModel.setTasks(taskAdapterModels);
     boardController.render();
     filterController.render();
   });
+
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+
+  if (!apiWithProvider.getSynchronize()) {
+    apiWithProvider.sync()
+      .then(() => {
+      })
+      .catch(() => {
+      });
+  }
+});
+
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});

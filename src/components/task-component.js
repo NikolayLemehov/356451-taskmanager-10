@@ -1,8 +1,10 @@
-import he from "he";
-import {monthNames} from "../const";
-import {formatTime} from "../utils/common";
-import AbstractComponent from "./abstract-component";
+import he from 'he';
+import {monthNames} from '../const';
+import {formatTime} from '../utils/common';
+import AbstractComponent from './abstract-component';
+import {debounce} from '../utils/debounce';
 
+const DEBOUNCE_DELAY = 1000;
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -86,6 +88,8 @@ export default class TaskComponent extends AbstractComponent {
   constructor(task) {
     super();
     this._task = task;
+    this._isFavorite = task.isFavorite;
+    this._isArchive = task.isArchive;
     this._cardInnerElement = this.getElement().querySelector(`.card__inner`);
     this._archiveBtnElement = this.getElement().querySelector(`.card__btn--archive`);
     this._favoritesBtnElement = this.getElement().querySelector(`.card__btn--favorites`);
@@ -101,11 +105,21 @@ export default class TaskComponent extends AbstractComponent {
   }
 
   setArchiveButtonClickHandler(handler) {
-    this._archiveBtnElement.addEventListener(`click`, handler);
+    const debounceHandler = debounce(handler, DEBOUNCE_DELAY);
+
+    this._archiveBtnElement.addEventListener(`click`, () => {
+      this._archiveBtnElement.classList.toggle(`card__btn--disabled`);
+      debounceHandler(this._isArchive === this._archiveBtnElement.classList.contains(`card__btn--disabled`));
+    });
   }
 
   setFavoritesButtonClickHandler(handler) {
-    this._favoritesBtnElement.addEventListener(`click`, handler);
+    const debounceHandler = debounce(handler, DEBOUNCE_DELAY);
+
+    this._favoritesBtnElement.addEventListener(`click`, () => {
+      this._favoritesBtnElement.classList.toggle(`card__btn--disabled`);
+      debounceHandler(this._isFavorite === this._favoritesBtnElement.classList.contains(`card__btn--disabled`));
+    });
   }
 
   disableArchiveBtn() {

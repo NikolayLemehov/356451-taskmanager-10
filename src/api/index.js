@@ -1,10 +1,10 @@
-import TaskAdapterModel from "./models/task-adapter-model";
+import TaskAdapterModel from '../models/task-adapter-model';
 
 const Method = {
   GET: `GET`,
   POST: `POST`,
   PUT: `PUT`,
-  DELETE: `DELETE`
+  DELETE: `DELETE`,
 };
 
 const checkStatus = (response) => {
@@ -15,7 +15,7 @@ const checkStatus = (response) => {
   }
 };
 
-export default class API {
+export default class Index {
   constructor(endPoint, authorization) {
     this._endPoint = endPoint;
     this._authorization = authorization;
@@ -32,7 +32,7 @@ export default class API {
       url: `tasks`,
       method: Method.POST,
       body: JSON.stringify(taskAdapterModel.getRAW()),
-      headers: new Headers({'Content-Type': `application/json`})
+      headers: new Headers({'Content-Type': `application/json`}),
     })
       .then((response) => response.json())
       .then(TaskAdapterModel.parseTask);
@@ -43,7 +43,7 @@ export default class API {
       url: `tasks/${id}`,
       method: Method.PUT,
       body: JSON.stringify(taskAdapterModel.getRAW()),
-      headers: new Headers({'Content-Type': `application/json`})
+      headers: new Headers({'Content-Type': `application/json`}),
     })
       .then((response) => response.json())
       .then(TaskAdapterModel.parseTask);
@@ -51,6 +51,16 @@ export default class API {
 
   deleteTask(id) {
     return this._load({url: `tasks/${id}`, method: Method.DELETE});
+  }
+
+  sync(data) {
+    return this._load({
+      url: `tasks/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({'Content-Type': `application/json`}),
+    })
+      .then((response) => response.json());
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {

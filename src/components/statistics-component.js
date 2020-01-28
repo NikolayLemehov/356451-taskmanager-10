@@ -1,7 +1,7 @@
-import moment from "moment";
-import flatpickr from "flatpickr";
-import AbstractSmartComponent from "./abstract-smart-component.js";
-import {renderColorsChart, renderDaysChart, renderTagsChart} from "../utils/renderChart";
+import moment from 'moment';
+import flatpickr from 'flatpickr';
+import AbstractSmartComponent from './abstract-smart-component.js';
+import {renderColorsChart, renderDaysChart, renderTagsChart} from '../utils/renderChart';
 
 const filterTasksByDateRange = (tasks, dateFrom, dateTo) => {
   return tasks.filter((task) => task.dueDate >= dateFrom && task.dueDate <= dateTo);
@@ -65,7 +65,11 @@ export default class StatisticsComponent extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createStatisticsTemplate({tasks: this._tasksModel.getTasks(), dateFrom: this._dateFrom, dateTo: this._dateTo});
+    return createStatisticsTemplate({
+      tasks: this._tasksModel.getTasks(),
+      dateFrom: this._dateFrom,
+      dateTo: this._dateTo,
+    });
   }
 
   show() {
@@ -132,7 +136,7 @@ export default class StatisticsComponent extends AbstractSmartComponent {
         if (dates.length === 2) {
           this.rerender(this._tasksModel, dates[0], dates[1]);
         }
-      }
+      },
     });
   }
 }

@@ -1,4 +1,4 @@
-import {getNoRepeatingDays} from "./utils/common";
+import {getNoRepeatingDays} from './utils/common';
 
 const Color = {
   BLACK: `black`,
