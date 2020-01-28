@@ -38,31 +38,18 @@ self.addEventListener(`activate`, (evt) => {
       }, []))));
 });
 
-const onFetch = (evt) => {
+self.addEventListener(`fetch`, (evt) => {
   const {request} = evt;
 
-  evt.respondWith(
-    caches.match(request)
-      .then((cacheResponse) => {
-        if (cacheResponse) {
-          return cacheResponse;
+  evt.respondWith(caches.match(request)
+    .then((cacheResponse) => cacheResponse ? cacheResponse : fetch(request)
+      .then((response) => {
+        if (!response || response.status !== 200 || response.type !== `basic`) {
+          return response;
         }
-
-        return fetch(request).then(
-          (response) => {
-            if (!response || response.status !== 200 || response.type !== `basic`) {
-              return response;
-            }
-
-            const clonedResponse = response.clone();
-
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, clonedResponse));
-
-            return response;
-          }
-        );
-      })
-  );
-};
-
-self.addEventListener(`fetch`, onFetch);
+        const cloneResponse = response.clone();
+        caches.open(CACHE_NAME)
+          .then((cache) => cache.put(request, cloneResponse));
+        return response;
+      })));
+});
